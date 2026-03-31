@@ -1,8 +1,10 @@
 import { Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import { clientProfile, favoritesSeed, reservationsSeed } from '../clientMockData'
 import { clientApi } from '../../../services/clientApi'
 import './ClientDashboardPage.css'
+
+const DEFAULT_AVATAR =
+  'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=300&q=80'
 
 function formatAmount(value) {
   return `${value.toLocaleString('fr-FR')} MAD`
@@ -11,9 +13,9 @@ function formatAmount(value) {
 export function ClientDashboardPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState('')
-  const [profile, setProfile] = useState(clientProfile)
-  const [reservations, setReservations] = useState(reservationsSeed)
-  const [favorites, setFavorites] = useState(favoritesSeed)
+  const [profile, setProfile] = useState({ firstName: '', avatar: DEFAULT_AVATAR })
+  const [reservations, setReservations] = useState([])
+  const [favorites, setFavorites] = useState([])
 
   useEffect(() => {
     let active = true
@@ -23,11 +25,11 @@ export function ClientDashboardPage() {
         if (!active) return
         setProfile((current) => ({
           ...current,
-          firstName: data.profile?.prenom || current.firstName,
-          avatar: data.profile?.avatar || current.avatar,
+          firstName: data.profile?.prenom || data.profile?.nom || current.firstName,
+          avatar: data.profile?.avatar || current.avatar || DEFAULT_AVATAR,
         }))
-        setReservations(data.reservations.length ? data.reservations : reservationsSeed)
-        setFavorites(data.favorites.length ? data.favorites : favoritesSeed)
+        setReservations(Array.isArray(data.reservations) ? data.reservations : [])
+        setFavorites(Array.isArray(data.favorites) ? data.favorites : [])
       })
       .catch((apiError) => {
         if (!active) return
@@ -50,7 +52,9 @@ export function ClientDashboardPage() {
       <header className="client-hero-card">
         <div>
           <p className="client-kicker">Espace client</p>
-          <h1>Bonjour {profile.firstName}, pret(e) pour votre prochaine experience ?</h1>
+          <h1>
+            Bonjour{profile.firstName ? ` ${profile.firstName}` : ''}, pret(e) pour votre prochaine experience ?
+          </h1>
           <p>
             Retrouvez vos reservations, messages et paiements en un seul endroit.
           </p>
@@ -91,17 +95,21 @@ export function ClientDashboardPage() {
             <Link to="/reservations">Tout voir</Link>
           </div>
           <div className="client-list">
-            {upcoming.map((item) => (
-              <div key={item.id} className="client-list-row">
-                <div>
-                  <h3>{item.title}</h3>
-                  <p>
-                    {item.city} - {item.date} - {item.hour}
-                  </p>
+            {upcoming.length === 0 ? (
+              <p className="client-list-empty">Aucune reservation a venir. Explorez le catalogue pour reserver.</p>
+            ) : (
+              upcoming.map((item) => (
+                <div key={item.id} className="client-list-row">
+                  <div>
+                    <h3>{item.title}</h3>
+                    <p>
+                      {item.city} - {item.date} - {item.hour}
+                    </p>
+                  </div>
+                  <strong>{formatAmount(item.amount)}</strong>
                 </div>
-                <strong>{formatAmount(item.amount)}</strong>
-              </div>
-            ))}
+              ))
+            )}
           </div>
         </article>
 

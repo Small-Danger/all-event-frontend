@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom'
 import { useEffect, useMemo, useState } from 'react'
-import { favoritesSeed } from '../clientMockData'
 import { clientApi } from '../../../services/clientApi'
 import './ClientFavoritesPage.css'
 
@@ -9,7 +8,7 @@ function formatAmount(value) {
 }
 
 export function ClientFavoritesPage() {
-  const [favorites, setFavorites] = useState(favoritesSeed)
+  const [favorites, setFavorites] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState('')
   const [search, setSearch] = useState('')
@@ -23,7 +22,7 @@ export function ClientFavoritesPage() {
       .getFavorites()
       .then((data) => {
         if (!active) return
-        if (data.length) setFavorites(data)
+        setFavorites(Array.isArray(data) ? data : [])
       })
       .catch((apiError) => {
         if (!active) return

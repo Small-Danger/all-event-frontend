@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from 'react'
-import { reservationsSeed } from '../clientMockData'
 import { clientApi } from '../../../services/clientApi'
 import './ClientReservationsPage.css'
 
@@ -41,7 +40,7 @@ export function ClientReservationsPage() {
       .getReservations()
       .then((data) => {
         if (!active) return
-        if (data.length) setRows(data)
+        setRows(Array.isArray(data) ? data : [])
       })
       .catch((apiError) => {
         if (!active) return
@@ -152,7 +151,11 @@ export function ClientReservationsPage() {
       {!isLoading && error && <div className="state-card">{error}</div>}
 
       {!isLoading && filteredRows.length === 0 && (
-        <div className="state-card">Aucune reservation dans cette categorie.</div>
+        <div className="state-card">
+          {rows.length === 0
+            ? 'Vous n’avez pas encore de reservation. Explorez le catalogue pour reserver une activite.'
+            : 'Aucune reservation dans cette categorie.'}
+        </div>
       )}
 
       {!isLoading && filteredRows.length > 0 && (

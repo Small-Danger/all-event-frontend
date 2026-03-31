@@ -1,4 +1,11 @@
 .client-dashboard-page { display: grid; gap: 16px; }
+.client-list-empty {
+  margin: 0;
+  padding: 12px 0;
+  color: #64748b;
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
 .state-card {
   border: 1px dashed #bfdbfe;
   border-radius: 16px;
