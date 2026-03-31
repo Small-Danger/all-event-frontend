@@ -1,0 +1,140 @@
+.pro-dashboard-page {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.pro-dashboard-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 6px;
+  background: #fff;
+  border: 1px solid #dbe3ef;
+  border-radius: 14px;
+  box-shadow: 0 4px 18px rgba(15, 23, 42, 0.06);
+}
+
+.pro-dashboard-tab {
+  flex: 1 1 140px;
+  border: 0;
+  border-radius: 10px;
+  padding: 12px 16px;
+  font: inherit;
+  font-weight: 800;
+  font-size: 0.9rem;
+  cursor: pointer;
+  color: #475569;
+  background: transparent;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.pro-dashboard-tab:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.pro-dashboard-tab.active {
+  background: linear-gradient(135deg, #166534, #15803d);
+  color: #f8fafc;
+  box-shadow: 0 4px 14px rgba(22, 101, 52, 0.28);
+}
+
+.pro-dashboard-panel {
+  display: grid;
+  gap: 1.25rem;
+  min-width: 0;
+}
+
+.pro-dashboard-error {
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #991b1b;
+  font-weight: 600;
+}
+
+.pro-kpis {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.pro-kpis article {
+  background: #fff;
+  border: 1px solid #dbe3ef;
+  border-radius: 14px;
+  padding: 10px 12px;
+  display: grid;
+  gap: 6px;
+}
+
+.pro-kpis span {
+  color: #64748b;
+  font-size: 0.85rem;
+}
+
+.pro-kpis strong {
+  font-size: 1.2rem;
+  color: #0f172a;
+}
+
+.pro-dashboard-quick-title {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #64748b;
+}
+
+.pro-dashboard-quick {
+  margin: 0;
+}
+
+.pro-dashboard-quick-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.pro-dashboard-quick-link {
+  display: grid;
+  gap: 4px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px solid #dbe3ef;
+  background: #fff;
+  text-decoration: none;
+  color: #0f172a;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.05);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.pro-dashboard-quick-link:hover {
+  border-color: rgba(22, 101, 52, 0.35);
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.08);
+}
+
+.pro-dashboard-quick-label {
+  font-weight: 800;
+  font-size: 0.95rem;
+}
+
+.pro-dashboard-quick-hint {
+  font-size: 0.8rem;
+  color: #64748b;
+}
+
+@media (max-width: 860px) {
+  .pro-kpis {
+    grid-template-columns: 1fr;
+  }
+
+  .pro-dashboard-quick-list {
+    grid-template-columns: 1fr;
+  }
+}

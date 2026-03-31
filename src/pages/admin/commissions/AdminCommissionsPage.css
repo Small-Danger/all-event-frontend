@@ -1,0 +1,250 @@
+.admin-com-page {
+  display: grid;
+  gap: 22px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.admin-com-hero {
+  padding: 26px 26px 24px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #1c1917 0%, #450a0a 42%, #7f1d1d 100%);
+  color: #fff;
+  box-shadow:
+    0 4px 6px -1px rgba(15, 23, 42, 0.12),
+    0 22px 48px -12px rgba(69, 10, 10, 0.45);
+}
+
+.admin-com-kicker {
+  margin: 0 0 6px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(254, 226, 226, 0.85);
+}
+
+.admin-com-title {
+  margin: 0 0 10px;
+  font-size: clamp(1.45rem, 2.8vw, 1.85rem);
+  font-weight: 800;
+}
+
+.admin-com-lead {
+  margin: 0;
+  max-width: 72ch;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.admin-com-kpis {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.admin-com-kpis article {
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  background: #fff;
+  padding: 12px 14px;
+  display: grid;
+  gap: 6px;
+}
+
+.admin-com-kpis span {
+  color: #64748b;
+  font-size: 0.78rem;
+}
+
+.admin-com-kpis strong {
+  color: #0f172a;
+  font-size: 1.12rem;
+}
+
+.admin-com-tabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.admin-com-tab {
+  border: 1px solid #dbe3ef;
+  border-radius: 12px;
+  padding: 9px 16px;
+  background: #fff;
+  font-weight: 700;
+  color: #475569;
+  cursor: pointer;
+}
+
+.admin-com-tab.active {
+  background: #0f172a;
+  color: #fff;
+  border-color: #0f172a;
+}
+
+.admin-com-error {
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #991b1b;
+  font-weight: 600;
+}
+
+.admin-com-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.admin-com-btn,
+.admin-com-actions button,
+.admin-com-pager button,
+.admin-com-modal-actions button {
+  border: 1px solid #dbe3ef;
+  border-radius: 10px;
+  padding: 8px 12px;
+  background: #fff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.admin-com-actions .danger {
+  border-color: #fecaca;
+  color: #b91c1c;
+  background: #fff5f5;
+}
+
+.admin-com-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.admin-com-table-wrap {
+  overflow-x: auto;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  background: #fff;
+}
+
+.admin-com-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 920px;
+}
+
+.admin-com-table th,
+.admin-com-table td {
+  text-align: left;
+  vertical-align: top;
+  padding: 11px 12px;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 0.86rem;
+}
+
+.admin-com-table th {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #64748b;
+  background: #f8fafc;
+}
+
+.admin-com-table td small {
+  display: block;
+  color: #64748b;
+}
+
+.admin-com-empty {
+  text-align: center;
+  color: #64748b;
+  padding: 24px 12px !important;
+}
+
+.admin-com-pill {
+  display: inline-flex;
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.admin-com-pill--en_attente {
+  background: #ffedd5;
+  color: #c2410c;
+}
+
+.admin-com-pill--accepte {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.admin-com-pill--refuse {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.admin-com-pager {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.admin-com-pager span {
+  color: #64748b;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.admin-com-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  display: grid;
+  place-items: center;
+  z-index: 80;
+  padding: 16px;
+}
+
+.admin-com-modal {
+  width: 100%;
+  max-width: 460px;
+  border-radius: 16px;
+  background: #fff;
+  padding: 20px;
+  display: grid;
+  gap: 10px;
+}
+
+.admin-com-modal h2 {
+  margin: 0 0 4px;
+}
+
+.admin-com-modal label {
+  display: grid;
+  gap: 5px;
+  font-size: 0.84rem;
+  color: #475569;
+  font-weight: 600;
+}
+
+.admin-com-modal input {
+  border: 1px solid #dbe3ef;
+  border-radius: 10px;
+  padding: 9px 10px;
+  font: inherit;
+}
+
+.admin-com-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}

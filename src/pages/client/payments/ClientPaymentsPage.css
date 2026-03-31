@@ -1,0 +1,51 @@
+.client-payments-page { display: grid; gap: 14px; }
+.client-payments-page h1 { margin: 0; }
+.client-payments-page p { margin: 4px 0 0; color: #64748b; }
+.payments-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.payments-panel {
+  border: 1px solid #dbeafe; border-radius: 16px; background: #ffffff; padding: 12px;
+  box-shadow: 0 10px 22px rgba(15,23,42,.06);
+}
+.panel-head h2 { margin: 0 0 10px; font-size: 1rem; }
+.methods-list, .invoice-list { display: grid; gap: 8px; }
+.method-card, .invoice-row {
+  border: 1px solid #e2e8f0; border-radius: 12px; padding: 10px;
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.method-card:hover, .invoice-row:hover { transform: translateY(-1px); box-shadow: 0 8px 16px rgba(15,23,42,.08); }
+.method-card p { margin: 2px 0 0; color: #64748b; }
+.method-card button {
+  border: 1px solid #dbe3ef; border-radius: 9px; padding: 7px 9px; background: #ffffff;
+  font-weight: 700; cursor: pointer;
+}
+.method-card input {
+  border: 1px solid #dbe3ef;
+  border-radius: 9px;
+  padding: 8px 10px;
+  font: inherit;
+  width: min(260px, 100%);
+}
+.method-actions { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+.method-actions button.danger { border-color: #fecaca; background: #fff5f5; color: #b91c1c; }
+.default-badge {
+  font-size: .78rem; background: #dcfce7; color: #166534; border-radius: 999px;
+  padding: 5px 8px; font-weight: 700;
+}
+.new-method-form { margin-top: 10px; display: flex; gap: 8px; }
+.new-method-form input {
+  flex: 1; border: 1px solid #dbe3ef; border-radius: 10px; padding: 10px 12px;
+}
+.new-method-form input:focus { border-color: #2563eb; box-shadow: 0 0 0 4px rgba(37,99,235,.12); outline: none; }
+.new-method-form button {
+  border: 0; border-radius: 10px; padding: 10px 12px;
+  background: linear-gradient(135deg,#1e40af,#2563eb);
+  color: #f8fafc; font-weight: 700; cursor: pointer;
+}
+.invoice-meta { display: grid; justify-items: end; gap: 4px; }
+.invoice-meta span {
+  text-transform: capitalize; border-radius: 999px; font-size: .75rem; padding: 4px 8px; font-weight: 700;
+}
+.invoice-meta span.paid { background: #dcfce7; color: #166534; }
+.invoice-meta span.refunded { background: #fee2e2; color: #991b1b; }
+@media (max-width: 860px) { .payments-grid { grid-template-columns: 1fr; } }

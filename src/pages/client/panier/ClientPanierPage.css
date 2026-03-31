@@ -1,0 +1,133 @@
+.client-panier-page {
+  display: grid;
+  gap: 14px;
+}
+
+.client-panier-head h1 {
+  margin: 0;
+}
+
+.client-panier-head p {
+  margin: 6px 0 0;
+  color: #64748b;
+}
+
+.client-panier-empty {
+  border: 1px solid #dbe3ef;
+  border-radius: 14px;
+  background: #fff;
+  padding: 16px;
+  display: grid;
+  gap: 10px;
+}
+
+.client-panier-list {
+  display: grid;
+  gap: 10px;
+}
+
+.client-panier-card {
+  border: 1px solid #dbe3ef;
+  border-radius: 14px;
+  background: #fff;
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.client-panier-card h2 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.client-panier-card p {
+  margin: 4px 0 0;
+  color: #64748b;
+}
+
+.client-panier-card small {
+  color: #475569;
+}
+
+.client-panier-actions {
+  display: grid;
+  justify-items: end;
+  gap: 8px;
+}
+
+.client-panier-actions label {
+  display: grid;
+  gap: 4px;
+  font-size: 0.82rem;
+  color: #475569;
+}
+
+.client-panier-actions input {
+  width: 80px;
+  border: 1px solid #d0d9e6;
+  border-radius: 10px;
+  padding: 7px 9px;
+}
+
+.client-panier-actions button {
+  border: 1px solid #fecaca;
+  color: #b91c1c;
+  background: #fff5f5;
+  border-radius: 10px;
+  padding: 7px 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.client-panier-footer {
+  border: 1px solid #dbe3ef;
+  border-radius: 14px;
+  background: #fff;
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.client-panier-footer p {
+  margin: 0;
+  color: #64748b;
+}
+
+.client-panier-footer strong {
+  font-size: 1.15rem;
+}
+
+.client-panier-footer-actions {
+  display: flex;
+  gap: 8px;
+}
+
+@media (max-width: 760px) {
+  .client-panier-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .client-panier-actions {
+    width: 100%;
+    justify-items: stretch;
+  }
+
+  .client-panier-actions input,
+  .client-panier-actions button {
+    width: 100%;
+  }
+
+  .client-panier-footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .client-panier-footer-actions {
+    flex-direction: column;
+  }
+}

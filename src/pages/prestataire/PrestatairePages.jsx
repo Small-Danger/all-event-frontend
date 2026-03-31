@@ -1,0 +1,8 @@
+export { PrestataireDashboardPage } from './dashboard/PrestataireDashboardPage'
+export { PrestataireActivitiesPage } from './activities/PrestataireActivitiesPage'
+export { PrestataireAvailabilityPage } from './availability/PrestataireAvailabilityPage'
+export { PrestataireReservationsPage } from './reservations/PrestataireReservationsPage'
+export { PrestataireReviewsPage } from './reviews/PrestataireReviewsPage'
+export { PrestataireStatisticsPanel } from './statistics/PrestataireStatisticsPanel'
+export { PrestataireAdsPage } from './ads/PrestataireAdsPage'
+export { PrestataireSettingsPage } from './settings/PrestataireSettingsPage'

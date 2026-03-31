@@ -1,0 +1,350 @@
+.admin-ads-page {
+  display: grid;
+  gap: 22px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.admin-ads-hero {
+  padding: 26px 26px 24px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #1c1917 0%, #450a0a 42%, #7f1d1d 100%);
+  color: #fff;
+  box-shadow:
+    0 4px 6px -1px rgba(15, 23, 42, 0.12),
+    0 22px 48px -12px rgba(69, 10, 10, 0.45);
+}
+
+.admin-ads-kicker {
+  margin: 0 0 6px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(254, 226, 226, 0.85);
+}
+
+.admin-ads-title {
+  margin: 0 0 10px;
+  font-size: clamp(1.45rem, 2.8vw, 1.85rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.admin-ads-lead {
+  margin: 0;
+  max-width: 72ch;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.admin-ads-tabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.admin-ads-tab {
+  border: 1px solid #dbe3ef;
+  border-radius: 12px;
+  padding: 9px 16px;
+  background: #fff;
+  font-weight: 700;
+  color: #475569;
+  cursor: pointer;
+}
+
+.admin-ads-tab.active {
+  background: #0f172a;
+  color: #fff;
+  border-color: #0f172a;
+}
+
+.admin-ads-error {
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #991b1b;
+  font-weight: 600;
+}
+
+.admin-ads-pay-explain {
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+}
+
+.admin-ads-pay-explain p {
+  margin: 0;
+  color: #475569;
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.admin-ads-subtitle {
+  margin: 2px 0 -8px;
+  font-size: 0.95rem;
+  color: #334155;
+}
+
+.admin-ads-kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+}
+
+.admin-ads-kpis article {
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  background: #fff;
+  padding: 12px 14px;
+  display: grid;
+  gap: 6px;
+}
+
+.admin-ads-kpis span {
+  color: #64748b;
+  font-size: 0.78rem;
+}
+
+.admin-ads-kpis strong {
+  color: #0f172a;
+  font-size: 1.12rem;
+}
+
+.admin-ads-table-wrap {
+  overflow-x: auto;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  background: #fff;
+}
+
+.admin-ads-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 980px;
+}
+
+.admin-ads-table th,
+.admin-ads-table td {
+  text-align: left;
+  vertical-align: top;
+  padding: 11px 12px;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 0.86rem;
+}
+
+.admin-ads-table th {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #64748b;
+  background: #f8fafc;
+}
+
+.admin-ads-empty {
+  text-align: center;
+  color: #64748b;
+  padding: 24px 12px !important;
+}
+
+.admin-ads-main {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: 10px;
+  align-items: start;
+}
+
+.admin-ads-main strong {
+  display: block;
+  color: #0f172a;
+  margin-bottom: 3px;
+}
+
+.admin-ads-main small {
+  display: block;
+  color: #64748b;
+}
+
+.admin-ads-thumb {
+  width: 56px;
+  height: 56px;
+  border-radius: 10px;
+  object-fit: cover;
+  border: 1px solid #e2e8f0;
+}
+
+.admin-ads-target {
+  display: grid;
+  gap: 4px;
+  color: #475569;
+}
+
+.admin-ads-pill {
+  display: inline-flex;
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.admin-ads-pill--brouillon {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.admin-ads-pill--en_attente_validation {
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+.admin-ads-pill--validee {
+  background: #ecfdf5;
+  color: #047857;
+}
+
+.admin-ads-pill--active {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.admin-ads-pill--inactive {
+  background: #f8fafc;
+  color: #64748b;
+}
+
+.admin-ads-pill--refusee {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.admin-ads-pay-pill {
+  display: inline-flex;
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.admin-ads-pay-pill--ok {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.admin-ads-pay-pill--wait {
+  background: #ffedd5;
+  color: #c2410c;
+}
+
+.admin-ads-pay-pill--bad {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.admin-ads-pay-pill--neutral {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.admin-ads-actions {
+  display: grid;
+  gap: 8px;
+  min-width: 150px;
+}
+
+.admin-ads-actions select,
+.admin-ads-actions button,
+.admin-ads-modal-actions button,
+.admin-ads-pager button {
+  border: 1px solid #dbe3ef;
+  border-radius: 10px;
+  padding: 7px 10px;
+  background: #fff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.admin-ads-detail-btn {
+  border: 1px solid #dbe3ef;
+  border-radius: 10px;
+  padding: 7px 10px;
+  background: #fff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.admin-ads-actions button.danger,
+.admin-ads-modal-actions button.danger {
+  border-color: #fecaca;
+  color: #b91c1c;
+  background: #fff5f5;
+}
+
+.admin-ads-actions button:disabled,
+.admin-ads-pager button:disabled,
+.admin-ads-modal-actions button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.admin-ads-pager {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.admin-ads-pager span {
+  color: #64748b;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.admin-ads-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  display: grid;
+  place-items: center;
+  z-index: 80;
+  padding: 16px;
+}
+
+.admin-ads-modal {
+  width: 100%;
+  max-width: 420px;
+  border-radius: 16px;
+  background: #fff;
+  padding: 22px 22px 18px;
+  box-shadow: 0 24px 48px rgba(15, 23, 42, 0.18);
+}
+
+.admin-ads-modal--wide {
+  max-width: 920px;
+}
+
+.admin-ads-modal h2 {
+  margin: 0 0 10px;
+  font-size: 1.12rem;
+}
+
+.admin-ads-modal p {
+  margin: 0 0 16px;
+  color: #475569;
+  line-height: 1.45;
+}
+
+.admin-ads-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}

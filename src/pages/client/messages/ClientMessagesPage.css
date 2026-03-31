@@ -1,0 +1,41 @@
+.client-messages-page { display: grid; gap: 14px; }
+.client-messages-page h1 { margin: 0; }
+.client-messages-page p { margin: 4px 0 0; color: #64748b; }
+.messages-layout { display: grid; grid-template-columns: 300px 1fr; gap: 12px; }
+.thread-list {
+  border: 1px solid #dbeafe; border-radius: 16px; background: #ffffff; padding: 10px;
+  display: grid; gap: 8px; align-content: start; max-height: 560px; overflow: auto;
+}
+.thread-list button {
+  border: 1px solid #e2e8f0; border-radius: 12px; background: #f8fafc; text-align: left;
+  padding: 10px; cursor: pointer; display: grid; gap: 4px; transition: all .2s ease;
+}
+.thread-list button:hover { border-color: #bfdbfe; background: #f8fbff; }
+.thread-list button.active { background: #eff6ff; border-color: #93c5fd; box-shadow: 0 8px 14px rgba(37,99,235,.12); }
+.thread-list small { color: #64748b; }
+.chat-panel {
+  border: 1px solid #dbeafe; border-radius: 16px; background: #ffffff; padding: 12px;
+  display: grid; gap: 10px; box-shadow: 0 10px 20px rgba(15,23,42,.05);
+}
+.chat-panel h2 { margin: 0; font-size: 1rem; }
+.chat-messages {
+  min-height: 260px; max-height: 420px; overflow: auto; display: grid; gap: 10px; align-content: start;
+  padding-right: 4px;
+}
+.chat-bubble {
+  width: fit-content; max-width: 80%; background: #f1f5f9; border-radius: 12px;
+  padding: 9px 11px; border: 1px solid #e2e8f0;
+}
+.chat-bubble.me { margin-left: auto; background: #dbeafe; border-color: #bfdbfe; }
+.chat-bubble p { margin: 0; color: #0f172a; }
+.chat-bubble small { color: #64748b; }
+.chat-composer { display: flex; gap: 8px; }
+.chat-composer input {
+  flex: 1; border: 1px solid #dbe3ef; border-radius: 10px; padding: 10px 12px;
+}
+.chat-composer input:focus { border-color: #2563eb; box-shadow: 0 0 0 4px rgba(37,99,235,.12); outline: none; }
+.chat-composer button {
+  border: 0; border-radius: 10px; background: linear-gradient(135deg,#1e40af,#2563eb);
+  color: #f8fafc; font-weight: 700; padding: 10px 12px; cursor: pointer;
+}
+@media (max-width: 860px) { .messages-layout { grid-template-columns: 1fr; } }
