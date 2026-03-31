@@ -1308,7 +1308,7 @@ export function LoginPage() {
 }
 
 export function RegisterPage() {
-  const { register, verifyOtp, resendOtp } = useAuth()
+  const { register } = useAuth()
   const navigate = useNavigate()
   const [form, setForm] = useState({
     name: '',
@@ -1317,8 +1317,6 @@ export function RegisterPage() {
     passwordConfirmation: '',
   })
   const [error, setError] = useState('')
-  const [otp, setOtp] = useState('')
-  const [otpStep, setOtpStep] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const visualImage =
     'https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=1200&q=80'
@@ -1335,27 +1333,11 @@ export function RegisterPage() {
     setIsSubmitting(true)
     try {
       const result = await register(form)
-      if (result?.otpRequired) {
-        setOtpStep(true)
-      } else if (result?.user) {
+      if (result?.user) {
         navigate(resolveHomeByRole(result.user.role), { replace: true })
       }
     } catch (registerError) {
       setError(registerError.message)
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
-
-  const onVerifyOtp = async (event) => {
-    event.preventDefault()
-    setError('')
-    setIsSubmitting(true)
-    try {
-      const user = await verifyOtp({ email: form.email, otp })
-      navigate(resolveHomeByRole(user.role), { replace: true })
-    } catch (e) {
-      setError(e.message)
     } finally {
       setIsSubmitting(false)
     }
@@ -1366,13 +1348,8 @@ export function RegisterPage() {
       <section className="auth-split">
         <div className="auth-card">
           <h1>Inscription</h1>
-          <p>
-            {otpStep
-              ? `Un code OTP a ete envoye a ${form.email}.`
-              : 'Rejoins ALL EVENT pour reserver et suivre tes activites.'}
-          </p>
-          {!otpStep ? (
-            <form className="auth-form" onSubmit={onSubmit}>
+          <p>Rejoins ALL EVENT pour reserver et suivre tes activites.</p>
+          <form className="auth-form" onSubmit={onSubmit}>
               <input
                 type="text"
                 placeholder="Nom complet"
@@ -1417,39 +1394,6 @@ export function RegisterPage() {
                 {isSubmitting ? 'Creation...' : 'Creer mon compte'}
               </button>
             </form>
-          ) : (
-            <form className="auth-form" onSubmit={onVerifyOtp}>
-              <input
-                type="text"
-                inputMode="numeric"
-                maxLength={6}
-                placeholder="Code OTP (6 chiffres)"
-                value={otp}
-                onChange={(event) => setOtp(event.target.value.replace(/\D/g, '').slice(0, 6))}
-                required
-              />
-              {error && <p className="auth-feedback error">{error}</p>}
-              <button className="btn btn-primary" type="submit" disabled={isSubmitting}>
-                {isSubmitting ? 'Verification...' : 'Activer mon compte'}
-              </button>
-              <button
-                className="btn btn-light"
-                type="button"
-                disabled={isSubmitting}
-                onClick={async () => {
-                  try {
-                    setError('')
-                    await resendOtp({ email: form.email })
-                    setError('Nouveau code OTP envoye.')
-                  } catch (e) {
-                    setError(e.message)
-                  }
-                }}
-              >
-                Renvoyer le code
-              </button>
-            </form>
-          )}
           <div className="auth-links">
             <Link to="/login">J&apos;ai deja un compte</Link>
           </div>

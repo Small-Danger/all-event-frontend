@@ -3,16 +3,39 @@ import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-do
 import logoAllevent from '../assets/brand/logo-allevent.png'
 import { useAuth } from '../context/useAuth'
 import { clientApi } from '../services/clientApi'
+import { publicApi } from '../services/publicApi'
 import './public-layout.css'
 
-const PUBLIC_CITY_KEY = 'allevent_public_city'
+const PUBLIC_VILLE_ID_KEY = 'allevent_public_ville_id'
+/** @deprecated Ancienne clé (liste mock) — migrée vers PUBLIC_VILLE_ID_KEY */
+const LEGACY_PUBLIC_CITY_KEY = 'allevent_public_city'
 
-const CITY_OPTIONS = [
-  { id: 'douala', label: 'Douala', filter: 'Douala' },
-  { id: 'yaounde', label: 'Yaoundé', filter: 'Yaounde' },
-  { id: 'bafoussam', label: 'Bafoussam', filter: 'Bafoussam' },
-  { id: 'kribi', label: 'Kribi', filter: 'Kribi' },
-]
+function normalizeStr(s) {
+  return String(s || '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+}
+
+/**
+ * @param {Array<{ id: number, nom?: string }>} villes
+ * @param {string} legacyId ex: douala, yaounde
+ */
+function findVilleFromLegacyKey(villes, legacyId) {
+  const hints = {
+    douala: ['douala'],
+    yaounde: ['yaound', 'yaounde'],
+    bafoussam: ['bafoussam'],
+    kribi: ['kribi'],
+  }
+  const needle = hints[legacyId]
+  if (!needle || !Array.isArray(villes) || !villes.length) return null
+  for (const v of villes) {
+    const n = normalizeStr(v.nom)
+    if (needle.some((h) => n.includes(h))) return v
+  }
+  return null
+}
 
 function TabIconHome({ active }) {
   return (
@@ -88,29 +111,99 @@ export function PublicLayout() {
   const navigate = useNavigate()
   const [locationOpen, setLocationOpen] = useState(false)
   const [cartCount, setCartCount] = useState(0)
-  const [selectedCityId, setSelectedCityId] = useState(() => {
-    const raw = localStorage.getItem(PUBLIC_CITY_KEY)
-    return raw && CITY_OPTIONS.some((c) => c.id === raw) ? raw : 'douala'
-  })
+  const [villes, setVilles] = useState([])
+  const [villesLoading, setVillesLoading] = useState(true)
+  const [villesError, setVillesError] = useState('')
+  const [selectedVilleId, setSelectedVilleId] = useState(() => localStorage.getItem(PUBLIC_VILLE_ID_KEY) || '')
 
-  const selectedCity = useMemo(
-    () => CITY_OPTIONS.find((c) => c.id === selectedCityId) ?? CITY_OPTIONS[0],
-    [selectedCityId],
+  const selectedVille = useMemo(
+    () => villes.find((v) => String(v.id) === String(selectedVilleId)) ?? null,
+    [villes, selectedVilleId],
   )
 
-  const persistCityId = useCallback((id) => {
-    setSelectedCityId(id)
-    localStorage.setItem(PUBLIC_CITY_KEY, id)
+  const persistVilleId = useCallback((id) => {
+    setSelectedVilleId(id)
+    if (id) localStorage.setItem(PUBLIC_VILLE_ID_KEY, id)
+    else localStorage.removeItem(PUBLIC_VILLE_ID_KEY)
   }, [])
 
-  const publicCity = selectedCity.filter
+  useEffect(() => {
+    let active = true
+    setVillesLoading(true)
+    setVillesError('')
+    publicApi
+      .getVilles()
+      .then((rows) => {
+        if (!active) return
+        const list = Array.isArray(rows) ? [...rows].sort((a, b) => String(a.nom || '').localeCompare(String(b.nom || ''))) : []
+        setVilles(list)
+      })
+      .catch(() => {
+        if (active) {
+          setVilles([])
+          setVillesError('Villes indisponibles')
+        }
+      })
+      .finally(() => {
+        if (active) setVillesLoading(false)
+      })
+    return () => {
+      active = false
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!villes.length || villesLoading) return
+
+    let stored = localStorage.getItem(PUBLIC_VILLE_ID_KEY)
+    const isValid = (id) => id && villes.some((v) => String(v.id) === String(id))
+
+    if (stored && !isValid(stored)) {
+      localStorage.removeItem(PUBLIC_VILLE_ID_KEY)
+      setSelectedVilleId('')
+      stored = null
+    }
+
+    if (stored && isValid(stored)) {
+      setSelectedVilleId((prev) => (String(prev) === String(stored) ? prev : stored))
+      return
+    }
+
+    const legacy = localStorage.getItem(LEGACY_PUBLIC_CITY_KEY)
+    if (legacy) {
+      const match = findVilleFromLegacyKey(villes, legacy)
+      localStorage.removeItem(LEGACY_PUBLIC_CITY_KEY)
+      if (match) {
+        persistVilleId(String(match.id))
+        return
+      }
+    }
+
+    setSelectedVilleId((prev) => {
+      if (prev && isValid(prev)) return prev
+      if (villes[0]) {
+        const id = String(villes[0].id)
+        localStorage.setItem(PUBLIC_VILLE_ID_KEY, id)
+        return id
+      }
+      return ''
+    })
+  }, [villes, villesLoading, persistVilleId])
+
+  /** Nom affiché + filtre recherche (aligné sur les activités API) */
+  const publicCity = selectedVille?.nom || ''
 
   const setPublicCity = useCallback(
     (cityFilter) => {
-      const match = CITY_OPTIONS.find((c) => c.filter === cityFilter)
-      if (match) persistCityId(match.id)
+      const f = normalizeStr(cityFilter)
+      if (!f || !villes.length) return
+      const match = villes.find(
+        (v) =>
+          normalizeStr(v.nom).includes(f) || f.includes(normalizeStr(v.nom)),
+      )
+      if (match) persistVilleId(String(match.id))
     },
-    [persistCityId],
+    [villes, persistVilleId],
   )
 
   const outletContext = useMemo(
@@ -188,6 +281,11 @@ export function PublicLayout() {
             onClick={() => setLocationOpen(true)}
             aria-haspopup="dialog"
             aria-expanded={locationOpen}
+            aria-label={
+              villesLoading
+                ? 'Chargement de la localisation'
+                : `Localisation : ${selectedVille?.nom || 'choisir une ville'}`
+            }
           >
             <span className="public-loc-pin" aria-hidden>
               <svg viewBox="0 0 24 24" width="18" height="18">
@@ -197,7 +295,9 @@ export function PublicLayout() {
                 />
               </svg>
             </span>
-            <span className="public-loc-label">{selectedCity.label}</span>
+            <span className="public-loc-label">
+              {villesLoading ? '…' : selectedVille?.nom || villesError || 'Ville'}
+            </span>
           </button>
 
           <div className="header-actions">
@@ -377,38 +477,50 @@ export function PublicLayout() {
                 ×
               </button>
             </div>
-            <p className="public-loc-lead">Choisissez une ville pour affiner l’exploration et les filtres.</p>
-            <ul className="public-loc-chips">
-              {CITY_OPTIONS.map((c) => (
-                <li key={c.id}>
-                  <button
-                    type="button"
-                    className={
-                      c.id === selectedCityId ? 'public-loc-chip public-loc-chip--on' : 'public-loc-chip'
-                    }
-                    onClick={() => {
-                      persistCityId(c.id)
-                      setLocationOpen(false)
-                    }}
-                  >
-                    <span className="public-loc-chip-pin" aria-hidden>
-                      <svg viewBox="0 0 24 24" width="16" height="16">
-                        <path
-                          fill="currentColor"
-                          d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"
-                        />
-                      </svg>
-                    </span>
-                    {c.label}
-                    {c.id === selectedCityId ? (
-                      <span className="public-loc-check" aria-hidden>
-                        ✓
+            <p className="public-loc-lead">
+              Choisissez une ville pour affiner l’exploration et les filtres (données catalogue).
+            </p>
+            {villesLoading ? (
+              <p className="public-loc-loading" role="status">
+                Chargement des villes…
+              </p>
+            ) : villesError ? (
+              <p className="public-loc-error">{villesError}</p>
+            ) : (
+              <ul className="public-loc-chips">
+                {villes.map((v) => (
+                  <li key={v.id}>
+                    <button
+                      type="button"
+                      className={
+                        String(v.id) === String(selectedVilleId)
+                          ? 'public-loc-chip public-loc-chip--on'
+                          : 'public-loc-chip'
+                      }
+                      onClick={() => {
+                        persistVilleId(String(v.id))
+                        setLocationOpen(false)
+                      }}
+                    >
+                      <span className="public-loc-chip-pin" aria-hidden>
+                        <svg viewBox="0 0 24 24" width="16" height="16">
+                          <path
+                            fill="currentColor"
+                            d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"
+                          />
+                        </svg>
                       </span>
-                    ) : null}
-                  </button>
-                </li>
-              ))}
-            </ul>
+                      {v.nom || `Ville ${v.id}`}
+                      {String(v.id) === String(selectedVilleId) ? (
+                        <span className="public-loc-check" aria-hidden>
+                          ✓
+                        </span>
+                      ) : null}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
         </div>
       ) : null}
