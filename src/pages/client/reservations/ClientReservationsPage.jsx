@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { reservationsSeed } from '../clientMockData'
 import { clientApi } from '../../../services/clientApi'
 import './ClientReservationsPage.css'
 
