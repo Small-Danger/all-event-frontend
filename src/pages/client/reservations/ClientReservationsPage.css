@@ -1,6 +1,28 @@
-.client-reservations-page { display: grid; gap: 14px; }
-.reservations-head h1 { margin: 0; }
-.reservations-head p { margin: 4px 0 0; color: #64748b; }
+.client-reservations-page {
+  display: grid;
+  gap: 18px;
+  animation: ae-page-enter 0.4s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .client-reservations-page {
+    animation: none;
+  }
+}
+
+.reservations-head h1 {
+  margin: 0;
+  font-size: clamp(1.35rem, 2.5vw, 1.65rem);
+  letter-spacing: -0.02em;
+  color: var(--ae-ink, #0f172a);
+}
+
+.reservations-head p {
+  margin: 6px 0 0;
+  color: var(--ae-muted, #64748b);
+  line-height: 1.5;
+  max-width: 52ch;
+}
 
 .reservation-kpis {
   display: grid;
@@ -47,8 +69,13 @@
 }
 .reservations-toolbar input:focus { border-color: #2563eb; box-shadow: 0 0 0 4px rgba(59,130,246,.12); }
 .state-card {
-  border: 1px dashed #bfdbfe; border-radius: 14px; padding: 20px;
-  background: linear-gradient(180deg,#ffffff,#f8fbff); color: #475569;
+  border: 1px dashed rgba(59, 130, 246, 0.35);
+  border-radius: var(--ae-radius, 16px);
+  padding: 22px 20px;
+  background: linear-gradient(180deg, #ffffff, #f8fafc);
+  color: var(--ae-ink-soft, #475569);
+  line-height: 1.55;
+  box-shadow: var(--ae-shadow-sm, 0 1px 2px rgba(15, 23, 42, 0.05));
 }
 .reservations-list { display: grid; gap: 10px; }
 .reservation-card {

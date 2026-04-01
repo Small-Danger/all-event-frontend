@@ -312,16 +312,21 @@
   inset: 0;
   background: rgba(15, 23, 42, 0.48);
   backdrop-filter: blur(6px);
-  display: grid;
-  place-items: center;
-  z-index: 80;
-  padding: 16px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  z-index: 120;
+  padding: max(16px, env(safe-area-inset-top, 0px)) 16px max(28px, env(safe-area-inset-bottom, 0px)) 16px;
+  box-sizing: border-box;
 }
 
 .pro-modal-card {
   width: min(480px, 100%);
+  max-height: min(90dvh, 720px);
   max-height: min(90vh, 720px);
-  overflow-y: auto;
   background: #fff;
   border-radius: 20px;
   border: 1px solid var(--ad-border);
@@ -329,6 +334,9 @@
   display: grid;
   gap: 14px;
   box-shadow: 0 28px 64px rgba(15, 23, 42, 0.22);
+  flex-shrink: 0;
+  overflow: hidden;
+  min-height: 0;
 }
 
 .pro-modal-card.ads-modal {

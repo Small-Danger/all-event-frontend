@@ -5,6 +5,7 @@ import { useAuth } from '../../context/useAuth'
 import { clientApi } from '../../services/clientApi'
 import { publicApi } from '../../services/publicApi'
 import { prestataireApi } from '../../services/prestataireApi'
+import { AuthPasswordField } from '../../components/AuthPasswordField'
 import './public.css'
 
 function resolveHomeByRole(role) {
@@ -943,6 +944,7 @@ export function PrestataireLoginPage() {
   const [form, setForm] = useState({ email: '', password: '' })
   const [error, setError] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
   const visualImage =
     'https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1200&q=80'
 
@@ -982,15 +984,19 @@ export function PrestataireLoginPage() {
               onChange={(event) =>
                 setForm((current) => ({ ...current, email: event.target.value }))
               }
+              autoComplete="email"
               required
             />
-            <input
-              type="password"
+            <AuthPasswordField
+              id="prestataire-login-password"
               placeholder="Mot de passe"
               value={form.password}
               onChange={(event) =>
                 setForm((current) => ({ ...current, password: event.target.value }))
               }
+              show={showPassword}
+              onToggleShow={() => setShowPassword((v) => !v)}
+              autoComplete="current-password"
               required
             />
             {error && <p className="auth-feedback error">{error}</p>}
@@ -1033,6 +1039,8 @@ export function PrestataireRegisterPage() {
   const [error, setError] = useState('')
   const [submitted, setSubmitted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
+  const [showPasswordConfirm, setShowPasswordConfirm] = useState(false)
   const visualImage =
     'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1200&q=80'
 
@@ -1143,17 +1151,22 @@ export function PrestataireRegisterPage() {
                 }
                 required
               />
-              <input
-                type="password"
+              <AuthPasswordField
+                id="prestataire-register-password"
                 placeholder="Mot de passe"
                 value={form.password}
                 onChange={(event) =>
                   setForm((current) => ({ ...current, password: event.target.value }))
                 }
+                show={showPassword}
+                onToggleShow={() => setShowPassword((v) => !v)}
+                autoComplete="new-password"
+                minLength={8}
+                maxLength={255}
                 required
               />
-              <input
-                type="password"
+              <AuthPasswordField
+                id="prestataire-register-password-confirm"
                 placeholder="Confirmation mot de passe"
                 value={form.passwordConfirmation}
                 onChange={(event) =>
@@ -1162,8 +1175,16 @@ export function PrestataireRegisterPage() {
                     passwordConfirmation: event.target.value,
                   }))
                 }
+                show={showPasswordConfirm}
+                onToggleShow={() => setShowPasswordConfirm((v) => !v)}
+                autoComplete="new-password"
+                minLength={8}
+                maxLength={255}
                 required
               />
+              <p className="auth-hint">
+                Au moins 8 caracteres : lettres, chiffres et symboles sont acceptes.
+              </p>
               <div className="auth-docs">
                 <strong>Pièces justificatives (min. 1)</strong>
                 {documents.map((doc, idx) => (
@@ -1239,6 +1260,7 @@ export function LoginPage() {
   const [form, setForm] = useState({ email: '', password: '' })
   const [error, setError] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
   const visualImage =
     'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1200&q=80'
 
@@ -1272,15 +1294,19 @@ export function LoginPage() {
               onChange={(event) =>
                 setForm((current) => ({ ...current, email: event.target.value }))
               }
+              autoComplete="email"
               required
             />
-            <input
-              type="password"
+            <AuthPasswordField
+              id="client-login-password"
               placeholder="Mot de passe"
               value={form.password}
               onChange={(event) =>
                 setForm((current) => ({ ...current, password: event.target.value }))
               }
+              show={showPassword}
+              onToggleShow={() => setShowPassword((v) => !v)}
+              autoComplete="current-password"
               required
             />
             {error && <p className="auth-feedback error">{error}</p>}
@@ -1318,6 +1344,8 @@ export function RegisterPage() {
   })
   const [error, setError] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
+  const [showPasswordConfirm, setShowPasswordConfirm] = useState(false)
   const visualImage =
     'https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=1200&q=80'
 
@@ -1357,6 +1385,7 @@ export function RegisterPage() {
                 onChange={(event) =>
                   setForm((current) => ({ ...current, name: event.target.value }))
                 }
+                autoComplete="name"
                 required
               />
               <input
@@ -1366,19 +1395,25 @@ export function RegisterPage() {
                 onChange={(event) =>
                   setForm((current) => ({ ...current, email: event.target.value }))
                 }
+                autoComplete="email"
                 required
               />
-              <input
-                type="password"
+              <AuthPasswordField
+                id="register-password"
                 placeholder="Mot de passe"
                 value={form.password}
                 onChange={(event) =>
                   setForm((current) => ({ ...current, password: event.target.value }))
                 }
+                show={showPassword}
+                onToggleShow={() => setShowPassword((v) => !v)}
+                autoComplete="new-password"
+                minLength={8}
+                maxLength={255}
                 required
               />
-              <input
-                type="password"
+              <AuthPasswordField
+                id="register-password-confirm"
                 placeholder="Confirmation mot de passe"
                 value={form.passwordConfirmation}
                 onChange={(event) =>
@@ -1387,8 +1422,16 @@ export function RegisterPage() {
                     passwordConfirmation: event.target.value,
                   }))
                 }
+                show={showPasswordConfirm}
+                onToggleShow={() => setShowPasswordConfirm((v) => !v)}
+                autoComplete="new-password"
+                minLength={8}
+                maxLength={255}
                 required
               />
+              <p className="auth-hint">
+                Au moins 8 caracteres : lettres, chiffres et symboles sont acceptes.
+              </p>
               {error && <p className="auth-feedback error">{error}</p>}
               <button className="btn btn-primary" type="submit" disabled={isSubmitting}>
                 {isSubmitting ? 'Creation...' : 'Creer mon compte'}

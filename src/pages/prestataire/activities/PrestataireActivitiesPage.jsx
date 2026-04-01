@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { proActivitiesSeed } from '../prestataireMockData'
 import { usePrestataireFlash } from '../../../context/PrestataireFlashContext'
 import { normalizeMediaDisplayUrl, prestataireApi } from '../../../services/prestataireApi'
 import { PrestataireGreenBand } from '../../../layouts/PrestataireGreenBand'
@@ -29,32 +28,9 @@ function looksLikeCloudinaryOrUploadError(message) {
   )
 }
 
-function normalizeSeed(rows) {
-  return rows.map((row) => ({
-    ...row,
-    description: row.description ?? '',
-    category: row.category ?? '-',
-    lieuName: row.lieuName ?? null,
-    categorieId: row.categorieId ?? null,
-    villeId: row.villeId ?? null,
-    lieuId: row.lieuId ?? null,
-    coverUrl: row.coverUrl ?? null,
-    mediasCount: row.mediasCount ?? 0,
-    creneauxCount: row.creneauxCount ?? 0,
-    prestataireId: row.prestataireId ?? null,
-    rawStatus:
-      row.rawStatus ??
-      (row.status === 'published'
-        ? 'publiee'
-        : row.status === 'pending_review'
-          ? 'en_attente_validation'
-          : 'brouillon'),
-  }))
-}
-
 export function PrestataireActivitiesPage() {
   const { showFlash } = usePrestataireFlash()
-  const [activities, setActivities] = useState(() => normalizeSeed(proActivitiesSeed))
+  const [activities, setActivities] = useState([])
   const [profiles, setProfiles] = useState([])
   const [catalog, setCatalog] = useState({ categories: [], villes: [] })
   const [isLoading, setIsLoading] = useState(true)
@@ -115,7 +91,7 @@ export function PrestataireActivitiesPage() {
     ])
       .then(([data, profs, cat]) => {
         if (!active) return
-        if (data.length) setActivities(data)
+        setActivities(Array.isArray(data) ? data : [])
         setProfiles(asArray(profs))
         setCatalog({
           categories: cat?.categories || [],
@@ -492,27 +468,29 @@ export function PrestataireActivitiesPage() {
 
             {createStep === 1 && (
               <div className="wizard-step">
-                <p className="wizard-help">
-                  Ajoutez une ou plusieurs images (max 5 Mo chacune, cote API). Elles seront envoyees apres la creation de
-                  l'activite.
-                </p>
-                <label className="file-drop">
-                  <input type="file" accept="image/*" multiple onChange={onPickCreateImages} />
-                  <span>Cliquez ou deposez des images</span>
-                </label>
-                {createFiles.length > 0 && (
-                  <ul className="image-preview-list">
-                    {createFiles.map((file, index) => (
-                      <li key={`${file.name}-${index}`}>
-                        <img src={createPreviewUrls.current[index]} alt="" />
-                        <button type="button" className="remove-thumb" onClick={() => removeCreateImageAt(index)}>
-                          Retirer
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-                <div className="modal-actions">
+                <div className="prestataire-modal-scroll">
+                  <p className="wizard-help">
+                    Ajoutez une ou plusieurs images (max 5 Mo chacune, cote API). Elles seront envoyees apres la creation de
+                    l'activite.
+                  </p>
+                  <label className="file-drop">
+                    <input type="file" accept="image/*" multiple onChange={onPickCreateImages} />
+                    <span>Cliquez ou deposez des images</span>
+                  </label>
+                  {createFiles.length > 0 && (
+                    <ul className="image-preview-list">
+                      {createFiles.map((file, index) => (
+                        <li key={`${file.name}-${index}`}>
+                          <img src={createPreviewUrls.current[index]} alt="" />
+                          <button type="button" className="remove-thumb" onClick={() => removeCreateImageAt(index)}>
+                            Retirer
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+                <div className="modal-actions prestataire-modal-footer">
                   <button type="button" onClick={() => setCreateStep(2)} disabled={false}>
                     Continuer
                   </button>
@@ -525,107 +503,109 @@ export function PrestataireActivitiesPage() {
 
             {createStep === 2 && (
               <form className="activity-form" onSubmit={submitCreate}>
-                <fieldset className="form-section">
-                  <legend>Liaisons obligatoires</legend>
-                  <label>
-                    Prestataire
-                    <select
-                      value={createForm.prestataire_id}
-                      onChange={(e) => setCreateForm((f) => ({ ...f, prestataire_id: e.target.value }))}
-                      required
-                    >
-                      <option value="">Choisir...</option>
-                      {profiles.map((p) => (
-                        <option key={p.id} value={p.id}>
-                          {p.nom || `Prestataire #${p.id}`}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                  <label>
-                    Categorie
-                    <select
-                      value={createForm.categorie_id}
-                      onChange={(e) => setCreateForm((f) => ({ ...f, categorie_id: e.target.value }))}
-                      required
-                    >
-                      <option value="">Choisir...</option>
-                      {catalog.categories.map((c) => (
-                        <option key={c.id} value={c.id}>
-                          {c.nom}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                  <label>
-                    Ville
-                    <select
-                      value={createForm.ville_id}
-                      onChange={(e) => setCreateForm((f) => ({ ...f, ville_id: e.target.value }))}
-                      required
-                    >
-                      <option value="">Choisir...</option>
-                      {catalog.villes.map((v) => (
-                        <option key={v.id} value={v.id}>
-                          {v.nom}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                </fieldset>
+                <div className="prestataire-modal-scroll">
+                  <fieldset className="form-section">
+                    <legend>Liaisons obligatoires</legend>
+                    <label>
+                      Prestataire
+                      <select
+                        value={createForm.prestataire_id}
+                        onChange={(e) => setCreateForm((f) => ({ ...f, prestataire_id: e.target.value }))}
+                        required
+                      >
+                        <option value="">Choisir...</option>
+                        {profiles.map((p) => (
+                          <option key={p.id} value={p.id}>
+                            {p.nom || `Prestataire #${p.id}`}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                    <label>
+                      Categorie
+                      <select
+                        value={createForm.categorie_id}
+                        onChange={(e) => setCreateForm((f) => ({ ...f, categorie_id: e.target.value }))}
+                        required
+                      >
+                        <option value="">Choisir...</option>
+                        {catalog.categories.map((c) => (
+                          <option key={c.id} value={c.id}>
+                            {c.nom}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                    <label>
+                      Ville
+                      <select
+                        value={createForm.ville_id}
+                        onChange={(e) => setCreateForm((f) => ({ ...f, ville_id: e.target.value }))}
+                        required
+                      >
+                        <option value="">Choisir...</option>
+                        {catalog.villes.map((v) => (
+                          <option key={v.id} value={v.id}>
+                            {v.nom}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                  </fieldset>
 
-                <fieldset className="form-section">
-                  <legend>Contenu affiche (web & mobile)</legend>
-                  <label>
-                    Titre
-                    <input
-                      value={createForm.titre}
-                      onChange={(e) => setCreateForm((f) => ({ ...f, titre: e.target.value }))}
-                      required
-                      maxLength={255}
-                    />
-                  </label>
-                  <label>
-                    Description
-                    <textarea
-                      rows={4}
-                      value={createForm.description}
-                      onChange={(e) => setCreateForm((f) => ({ ...f, description: e.target.value }))}
-                      placeholder="Decrivez l'experience, le deroule, les prerequis..."
-                    />
-                  </label>
-                  <label>
-                    Prix de base (MAD)
-                    <input
-                      type="number"
-                      min="0"
-                      step="1"
-                      value={createForm.prix_base}
-                      onChange={(e) => setCreateForm((f) => ({ ...f, prix_base: e.target.value }))}
-                      required
-                    />
-                  </label>
-                  <label>
-                    Publication
-                    <select
-                      value={createForm.statut}
-                      onChange={(e) => setCreateForm((f) => ({ ...f, statut: e.target.value }))}
-                    >
-                      {STATUT_OPTIONS.map((opt) => (
-                        <option key={opt.value} value={opt.value}>
-                          {opt.label}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                </fieldset>
+                  <fieldset className="form-section">
+                    <legend>Contenu affiche (web & mobile)</legend>
+                    <label>
+                      Titre
+                      <input
+                        value={createForm.titre}
+                        onChange={(e) => setCreateForm((f) => ({ ...f, titre: e.target.value }))}
+                        required
+                        maxLength={255}
+                      />
+                    </label>
+                    <label>
+                      Description
+                      <textarea
+                        rows={4}
+                        value={createForm.description}
+                        onChange={(e) => setCreateForm((f) => ({ ...f, description: e.target.value }))}
+                        placeholder="Decrivez l'experience, le deroule, les prerequis..."
+                      />
+                    </label>
+                    <label>
+                      Prix de base (MAD)
+                      <input
+                        type="number"
+                        min="0"
+                        step="1"
+                        value={createForm.prix_base}
+                        onChange={(e) => setCreateForm((f) => ({ ...f, prix_base: e.target.value }))}
+                        required
+                      />
+                    </label>
+                    <label>
+                      Publication
+                      <select
+                        value={createForm.statut}
+                        onChange={(e) => setCreateForm((f) => ({ ...f, statut: e.target.value }))}
+                      >
+                        {STATUT_OPTIONS.map((opt) => (
+                          <option key={opt.value} value={opt.value}>
+                            {opt.label}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                  </fieldset>
 
-                <p className="form-note">
-                  Vous ne pouvez pas publier seul sur le catalogue : choisissez une soumission pour validation ou laissez en
-                  brouillon. Le champ lieu précis (`lieu_id`) reste optionnel côté API.
-                </p>
+                  <p className="form-note">
+                    Vous ne pouvez pas publier seul sur le catalogue : choisissez une soumission pour validation ou laissez en
+                    brouillon. Le champ lieu précis (`lieu_id`) reste optionnel côté API.
+                  </p>
+                </div>
 
-                <div className="modal-actions">
+                <div className="modal-actions prestataire-modal-footer">
                   <button type="button" className="ghost" onClick={() => setCreateStep(1)}>
                     Retour
                   </button>
@@ -651,7 +631,7 @@ export function PrestataireActivitiesPage() {
             </div>
             {detailLoading && <p>Chargement...</p>}
             {!detailLoading && detailData && (
-              <>
+              <div className="prestataire-modal-scroll">
                 <div className="detail-grid">
                   <div>
                     <h3>{detailData.titre}</h3>
@@ -701,7 +681,7 @@ export function PrestataireActivitiesPage() {
                     </li>
                   ))}
                 </ul>
-              </>
+              </div>
             )}
           </section>
         </div>
@@ -719,125 +699,127 @@ export function PrestataireActivitiesPage() {
             {editLoading && <p>Chargement...</p>}
             {!editLoading && (
               <form className="activity-form" onSubmit={saveEdit}>
-                <fieldset className="form-section">
-                  <legend>Liaisons</legend>
-                  <label>
-                    Categorie
-                    <select
-                      value={editForm.categorie_id}
-                      onChange={(e) => setEditForm((f) => ({ ...f, categorie_id: e.target.value }))}
-                      required
-                    >
-                      {catalog.categories.map((c) => (
-                        <option key={c.id} value={c.id}>
-                          {c.nom}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                  <label>
-                    Ville
-                    <select
-                      value={editForm.ville_id}
-                      onChange={(e) => setEditForm((f) => ({ ...f, ville_id: e.target.value }))}
-                      required
-                    >
-                      {catalog.villes.map((v) => (
-                        <option key={v.id} value={v.id}>
-                          {v.nom}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                </fieldset>
-                {editDetail?.statut === 'publiee' ? (
-                  <p className="form-note form-note--highlight">
-                    Cette activité est <strong>en ligne</strong> sur le catalogue. Si vous modifiez le contenu ci-dessous ou
-                    les images, elle repassera en <strong>attente de validation</strong> après enregistrement (règle
-                    serveur). Vous pouvez aussi demander une revalidation depuis la carte, sans modifier la fiche.
-                  </p>
-                ) : null}
-                <fieldset className="form-section">
-                  <legend>Contenu</legend>
-                  <label>
-                    Titre
-                    <input
-                      value={editForm.titre}
-                      onChange={(e) => setEditForm((f) => ({ ...f, titre: e.target.value }))}
-                      required
-                    />
-                  </label>
-                  <label>
-                    Description
-                    <textarea
-                      rows={4}
-                      value={editForm.description}
-                      onChange={(e) => setEditForm((f) => ({ ...f, description: e.target.value }))}
-                    />
-                  </label>
-                  <label>
-                    Prix de base (MAD)
-                    <input
-                      type="number"
-                      min="0"
-                      value={editForm.prix_base}
-                      onChange={(e) => setEditForm((f) => ({ ...f, prix_base: e.target.value }))}
-                      required
-                    />
-                  </label>
-                  {editDetail?.statut !== 'publiee' ? (
+                <div className="prestataire-modal-scroll">
+                  <fieldset className="form-section">
+                    <legend>Liaisons</legend>
                     <label>
-                      Statut
+                      Categorie
                       <select
-                        value={editForm.statut}
-                        onChange={(e) => setEditForm((f) => ({ ...f, statut: e.target.value }))}
+                        value={editForm.categorie_id}
+                        onChange={(e) => setEditForm((f) => ({ ...f, categorie_id: e.target.value }))}
+                        required
                       >
-                        {STATUT_OPTIONS.map((opt) => (
-                          <option key={opt.value} value={opt.value}>
-                            {opt.label}
+                        {catalog.categories.map((c) => (
+                          <option key={c.id} value={c.id}>
+                            {c.nom}
                           </option>
                         ))}
                       </select>
                     </label>
+                    <label>
+                      Ville
+                      <select
+                        value={editForm.ville_id}
+                        onChange={(e) => setEditForm((f) => ({ ...f, ville_id: e.target.value }))}
+                        required
+                      >
+                        {catalog.villes.map((v) => (
+                          <option key={v.id} value={v.id}>
+                            {v.nom}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                  </fieldset>
+                  {editDetail?.statut === 'publiee' ? (
+                    <p className="form-note form-note--highlight">
+                      Cette activité est <strong>en ligne</strong> sur le catalogue. Si vous modifiez le contenu ci-dessous ou
+                      les images, elle repassera en <strong>attente de validation</strong> après enregistrement (règle
+                      serveur). Vous pouvez aussi demander une revalidation depuis la carte, sans modifier la fiche.
+                    </p>
                   ) : null}
-                </fieldset>
+                  <fieldset className="form-section">
+                    <legend>Contenu</legend>
+                    <label>
+                      Titre
+                      <input
+                        value={editForm.titre}
+                        onChange={(e) => setEditForm((f) => ({ ...f, titre: e.target.value }))}
+                        required
+                      />
+                    </label>
+                    <label>
+                      Description
+                      <textarea
+                        rows={4}
+                        value={editForm.description}
+                        onChange={(e) => setEditForm((f) => ({ ...f, description: e.target.value }))}
+                      />
+                    </label>
+                    <label>
+                      Prix de base (MAD)
+                      <input
+                        type="number"
+                        min="0"
+                        value={editForm.prix_base}
+                        onChange={(e) => setEditForm((f) => ({ ...f, prix_base: e.target.value }))}
+                        required
+                      />
+                    </label>
+                    {editDetail?.statut !== 'publiee' ? (
+                      <label>
+                        Statut
+                        <select
+                          value={editForm.statut}
+                          onChange={(e) => setEditForm((f) => ({ ...f, statut: e.target.value }))}
+                        >
+                          {STATUT_OPTIONS.map((opt) => (
+                            <option key={opt.value} value={opt.value}>
+                              {opt.label}
+                            </option>
+                          ))}
+                        </select>
+                      </label>
+                    ) : null}
+                  </fieldset>
 
-                <fieldset className="form-section">
-                  <legend>Images existantes</legend>
-                  <div className="edit-media-row">
-                    {(editDetail?.medias || [])
-                      .slice()
-                      .sort((a, b) => (a.ordre ?? 0) - (b.ordre ?? 0))
-                      .map((m) => (
-                        <div key={m.id} className="edit-media-item">
-                          <img
-                            src={normalizeMediaDisplayUrl(m.url) || m.url || ''}
-                            alt=""
-                            referrerPolicy="no-referrer"
-                          />
-                          <button type="button" className="danger small" onClick={() => deleteMedia(m.id)}>
-                            Supprimer
-                          </button>
-                        </div>
-                      ))}
-                    {!(editDetail?.medias || []).length && (
-                      <p className="muted">Aucune image pour le moment. Ajoutez-en ci-dessous.</p>
-                    )}
-                  </div>
-                  <label className="file-drop compact">
-                    <input
-                      type="file"
-                      accept="image/*"
-                      multiple
-                      onChange={(e) => setEditNewFiles(Array.from(e.target.files || []))}
-                    />
-                    <span>
-                      {editNewFiles.length ? `${editNewFiles.length} fichier(s) a envoyer` : 'Ajouter des images'}
-                    </span>
-                  </label>
-                </fieldset>
+                  <fieldset className="form-section">
+                    <legend>Images existantes</legend>
+                    <div className="edit-media-row">
+                      {(editDetail?.medias || [])
+                        .slice()
+                        .sort((a, b) => (a.ordre ?? 0) - (b.ordre ?? 0))
+                        .map((m) => (
+                          <div key={m.id} className="edit-media-item">
+                            <img
+                              src={normalizeMediaDisplayUrl(m.url) || m.url || ''}
+                              alt=""
+                              referrerPolicy="no-referrer"
+                            />
+                            <button type="button" className="danger small" onClick={() => deleteMedia(m.id)}>
+                              Supprimer
+                            </button>
+                          </div>
+                        ))}
+                      {!(editDetail?.medias || []).length && (
+                        <p className="muted">Aucune image pour le moment. Ajoutez-en ci-dessous.</p>
+                      )}
+                    </div>
+                    <label className="file-drop compact">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        onChange={(e) => setEditNewFiles(Array.from(e.target.files || []))}
+                      />
+                      <span>
+                        {editNewFiles.length ? `${editNewFiles.length} fichier(s) a envoyer` : 'Ajouter des images'}
+                      </span>
+                    </label>
+                  </fieldset>
+                </div>
 
-                <div className="modal-actions">
+                <div className="modal-actions prestataire-modal-footer">
                   <button type="submit">Enregistrer</button>
                   <button type="button" className="ghost" onClick={() => setEditOpen(false)}>
                     Annuler

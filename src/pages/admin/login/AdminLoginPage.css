@@ -118,7 +118,7 @@
   font: inherit;
 }
 
-.admin-login-card button {
+.admin-login-form > button[type='submit'] {
   border: 0;
   border-radius: 10px;
   background: linear-gradient(135deg, #7f1d1d, #dc2626);
@@ -129,11 +129,11 @@
   transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
-.admin-login-card button:hover {
+.admin-login-form > button[type='submit']:hover {
   transform: translateY(-1px);
 }
 
-.admin-login-card button:disabled {
+.admin-login-form > button[type='submit']:disabled {
   opacity: 0.7;
   cursor: progress;
   transform: none;

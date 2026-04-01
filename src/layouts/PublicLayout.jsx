@@ -4,6 +4,7 @@ import logoAllevent from '../assets/brand/logo-allevent.png'
 import { useAuth } from '../context/useAuth'
 import { clientApi } from '../services/clientApi'
 import { publicApi } from '../services/publicApi'
+import { AlleventChatWidget } from '../components/chat/AlleventChatWidget'
 import './public-layout.css'
 
 const PUBLIC_VILLE_ID_KEY = 'allevent_public_ville_id'
@@ -524,6 +525,8 @@ export function PublicLayout() {
           </div>
         </div>
       ) : null}
+
+      <AlleventChatWidget />
     </div>
   )
 }

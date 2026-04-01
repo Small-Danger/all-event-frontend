@@ -245,11 +245,15 @@
   position: fixed;
   inset: 0;
   background: rgba(15, 23, 42, 0.5);
-  display: grid;
-  place-items: center;
-  z-index: 80;
-  padding: 16px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
   overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  z-index: 120;
+  padding: max(16px, env(safe-area-inset-top, 0px)) 16px max(28px, env(safe-area-inset-bottom, 0px)) 16px;
+  box-sizing: border-box;
 }
 
 .pro-modal-card {
@@ -258,11 +262,75 @@
   border-radius: 18px;
   border: 1px solid #e2e8f0;
   padding: 20px;
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: 14px;
-  max-height: min(92vh, 900px);
-  overflow-y: auto;
+  max-height: min(90dvh, 900px);
+  max-height: min(90vh, 900px);
+  overflow: hidden;
+  min-height: 0;
+  flex-shrink: 0;
   box-shadow: 0 24px 48px rgba(15, 23, 42, 0.18);
+}
+
+.pro-modal-card > .modal-head {
+  flex-shrink: 0;
+}
+
+.pro-modal-card > .wizard-step {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.pro-modal-card > .prestataire-modal-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.prestataire-modal-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  display: grid;
+  gap: 16px;
+}
+
+.wizard-step {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  gap: 0;
+}
+
+.wizard-step .prestataire-modal-scroll {
+  gap: 14px;
+}
+
+.pro-modal-card > form.activity-form {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  gap: 0;
+  overflow: hidden;
+}
+
+.pro-modal-card > form.activity-form > .prestataire-modal-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.prestataire-modal-footer.modal-actions {
+  flex-shrink: 0;
+  margin-top: 0;
+  padding-top: 12px;
+  border-top: 1px solid #e2e8f0;
+  background: #fff;
 }
 
 .pro-modal-wide {

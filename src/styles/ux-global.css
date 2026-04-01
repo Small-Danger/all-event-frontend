@@ -1,0 +1,81 @@
+/**
+ * Couche UX globale ALL EVENT — tokens, accessibilité, rythme visuel.
+ * Ne modifie aucune logique applicative.
+ */
+
+:root {
+  --ae-font: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --ae-ink: #0f172a;
+  --ae-ink-soft: #334155;
+  --ae-muted: #64748b;
+  --ae-border: #e2e8f0;
+  --ae-surface: #ffffff;
+  --ae-accent: #ea580c;
+  --ae-accent-hover: #c2410c;
+  --ae-accent-soft: rgba(234, 88, 12, 0.14);
+  --ae-blue: #2563eb;
+  --ae-radius-sm: 10px;
+  --ae-radius: 16px;
+  --ae-radius-lg: 22px;
+  --ae-shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05);
+  --ae-shadow-md: 0 8px 30px rgba(15, 23, 42, 0.07);
+  --ae-shadow-lg: 0 20px 50px rgba(15, 23, 42, 0.1);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  font-family: var(--ae-font);
+  color: var(--ae-ink);
+  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 45%, #eef2f7 100%);
+  min-height: 100vh;
+  line-height: 1.55;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+a {
+  color: inherit;
+}
+
+a[href]:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[role='button']:focus-visible,
+[tabindex]:not([tabindex='-1']):focus-visible {
+  outline: 2px solid var(--ae-accent);
+  outline-offset: 3px;
+}
+
+::selection {
+  background: var(--ae-accent-soft);
+  color: var(--ae-ink);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+@keyframes ae-page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

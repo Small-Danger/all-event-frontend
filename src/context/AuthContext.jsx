@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { AuthContext } from './AuthContextInstance'
+import { messageFromApiPayload } from '../utils/apiError'
 
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000/api'
@@ -20,7 +21,9 @@ async function apiRequest(path, options = {}, token) {
   const payload = await response.json().catch(() => ({}))
   if (!response.ok) {
     const errorMessage =
-      payload?.message || payload?.error || 'Une erreur est survenue.'
+      messageFromApiPayload(payload) ||
+      payload?.error ||
+      'Une erreur est survenue.'
     throw new Error(errorMessage)
   }
   return payload

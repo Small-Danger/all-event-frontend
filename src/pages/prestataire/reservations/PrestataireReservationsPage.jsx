@@ -293,8 +293,9 @@ export function PrestataireReservationsPage() {
       {selectedReservation && (
         <div className="pro-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="res-detail-title">
           <section className="pro-modal-card res-modal">
-            <h2 id="res-detail-title">Détail réservation #{selectedReservation.id}</h2>
-            <dl className="res-dl">
+            <div className="res-modal-scroll">
+              <h2 id="res-detail-title">Détail réservation #{selectedReservation.id}</h2>
+              <dl className="res-dl">
               <div>
                 <dt>Client</dt>
                 <dd>{selectedReservation.customer}</dd>
@@ -368,8 +369,9 @@ export function PrestataireReservationsPage() {
                 </li>
               ))}
             </ul>
+            </div>
 
-            <div className="modal-actions">
+            <div className="modal-actions res-modal-footer">
               {canConfirm(selectedReservation.status) && (
                 <button
                   type="button"

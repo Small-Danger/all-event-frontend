@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from 'react'
-import { proProfile } from '../prestataireMockData'
 import { usePrestataireFlash } from '../../../context/PrestataireFlashContext'
 import { prestataireApi } from '../../../services/prestataireApi'
 import './PrestataireSettingsPage.css'
@@ -16,7 +15,7 @@ export function PrestataireSettingsPage() {
   const { showFlash } = usePrestataireFlash()
   const [profileId, setProfileId] = useState(null)
   const [form, setForm] = useState({
-    businessName: proProfile.name,
+    businessName: '',
     legalName: '',
     fiscalNumber: '',
   })
@@ -49,17 +48,24 @@ export function PrestataireSettingsPage() {
     prestataireApi
       .getProfiles()
       .then((profiles) => {
-        if (!active || !profiles.length) return
+        if (!active) return
+        if (!profiles.length) {
+          setProfileId(null)
+          setProfileStatus('')
+          setRejectReason('')
+          setForm({ businessName: '', legalName: '', fiscalNumber: '' })
+          setDocuments([])
+          return
+        }
         const first = profiles[0]
         setProfileId(first.id)
         setProfileStatus(first.statut || '')
         setRejectReason(first.motif_rejet || '')
-        setForm((current) => ({
-          ...current,
-          businessName: first.nom || current.businessName,
+        setForm({
+          businessName: first.nom || '',
           legalName: first.raison_sociale || '',
           fiscalNumber: first.numero_fiscal || '',
-        }))
+        })
         loadDocuments(first.id)
       })
       .catch((apiError) => {

@@ -1,3 +1,5 @@
+import { messageFromApiPayload } from '../utils/apiError'
+
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000/api'
 const TOKEN_STORAGE_KEY = 'allevent_auth_token'
@@ -21,7 +23,7 @@ async function request(path, options = {}) {
 
   const payload = await response.json().catch(() => ({}))
   if (!response.ok) {
-    throw new Error(payload?.message || 'Erreur API client.')
+    throw new Error(messageFromApiPayload(payload) || 'Erreur API client.')
   }
   return payload
 }

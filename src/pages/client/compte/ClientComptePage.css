@@ -1,7 +1,14 @@
 .client-compte-page {
   max-width: 560px;
   margin: 0 auto;
-  padding: 0 0 32px;
+  padding: 0 0 40px;
+  animation: ae-page-enter 0.4s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .client-compte-page {
+    animation: none;
+  }
 }
 
 .client-compte-head {

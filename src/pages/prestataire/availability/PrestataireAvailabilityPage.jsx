@@ -563,68 +563,70 @@ export function PrestataireAvailabilityPage() {
             <p className="modal-lead">
               À l’enregistrement, la base initialise <strong>capacite_restante</strong> égale à la capacité totale.
             </p>
-            <form className="slot-form-v2" onSubmit={addSlot}>
-              <label className="slot-form-field">
-                <span className="slot-form-label">Date</span>
-                <input
-                  type="date"
-                  value={newSlot.date}
-                  onChange={(event) =>
-                    setNewSlot((current) => ({ ...current, date: event.target.value }))
-                  }
-                  required
-                />
-              </label>
-              <div className="slot-form-row">
+            <form className="slot-form-v2 availability-modal-form" onSubmit={addSlot}>
+              <div className="availability-modal-body">
                 <label className="slot-form-field">
-                  <span className="slot-form-label">Début</span>
+                  <span className="slot-form-label">Date</span>
                   <input
-                    type="time"
-                    value={newSlot.start}
+                    type="date"
+                    value={newSlot.date}
                     onChange={(event) =>
-                      setNewSlot((current) => ({ ...current, start: event.target.value }))
+                      setNewSlot((current) => ({ ...current, date: event.target.value }))
+                    }
+                    required
+                  />
+                </label>
+                <div className="slot-form-row">
+                  <label className="slot-form-field">
+                    <span className="slot-form-label">Début</span>
+                    <input
+                      type="time"
+                      value={newSlot.start}
+                      onChange={(event) =>
+                        setNewSlot((current) => ({ ...current, start: event.target.value }))
+                      }
+                      required
+                    />
+                  </label>
+                  <label className="slot-form-field">
+                    <span className="slot-form-label">Fin</span>
+                    <input
+                      type="time"
+                      value={newSlot.end}
+                      onChange={(event) =>
+                        setNewSlot((current) => ({ ...current, end: event.target.value }))
+                      }
+                      required
+                    />
+                  </label>
+                </div>
+                <label className="slot-form-field">
+                  <span className="slot-form-label">Capacité totale</span>
+                  <input
+                    type="number"
+                    min="1"
+                    value={newSlot.capacity}
+                    onChange={(event) =>
+                      setNewSlot((current) => ({ ...current, capacity: event.target.value }))
                     }
                     required
                   />
                 </label>
                 <label className="slot-form-field">
-                  <span className="slot-form-label">Fin</span>
+                  <span className="slot-form-label">Prix appliqué (MAD, optionnel)</span>
                   <input
-                    type="time"
-                    value={newSlot.end}
+                    type="number"
+                    min="0"
+                    step="1"
+                    value={newSlot.prixApplique}
                     onChange={(event) =>
-                      setNewSlot((current) => ({ ...current, end: event.target.value }))
+                      setNewSlot((current) => ({ ...current, prixApplique: event.target.value }))
                     }
-                    required
+                    placeholder="Vide = prix de base de l’activité"
                   />
                 </label>
               </div>
-              <label className="slot-form-field">
-                <span className="slot-form-label">Capacité totale</span>
-                <input
-                  type="number"
-                  min="1"
-                  value={newSlot.capacity}
-                  onChange={(event) =>
-                    setNewSlot((current) => ({ ...current, capacity: event.target.value }))
-                  }
-                  required
-                />
-              </label>
-              <label className="slot-form-field">
-                <span className="slot-form-label">Prix appliqué (MAD, optionnel)</span>
-                <input
-                  type="number"
-                  min="0"
-                  step="1"
-                  value={newSlot.prixApplique}
-                  onChange={(event) =>
-                    setNewSlot((current) => ({ ...current, prixApplique: event.target.value }))
-                  }
-                  placeholder="Vide = prix de base de l’activité"
-                />
-              </label>
-              <div className="modal-actions">
+              <div className="modal-actions availability-modal-footer">
                 <button type="submit" className="btn-submit">
                   Créer
                 </button>
@@ -645,89 +647,91 @@ export function PrestataireAvailabilityPage() {
               Ajustez les horaires, les capacités ou le statut. Attention : si vous augmentez la capacité totale, ajustez
               manuellement le restant si besoin.
             </p>
-            <form className="slot-form-v2" onSubmit={saveEdit}>
-              <label className="slot-form-field">
-                <span className="slot-form-label">Date</span>
-                <input
-                  type="date"
-                  value={editForm.date}
-                  onChange={(event) => setEditForm((f) => ({ ...f, date: event.target.value }))}
-                  required
-                />
-              </label>
-              <div className="slot-form-row">
+            <form className="slot-form-v2 availability-modal-form" onSubmit={saveEdit}>
+              <div className="availability-modal-body">
                 <label className="slot-form-field">
-                  <span className="slot-form-label">Début</span>
+                  <span className="slot-form-label">Date</span>
                   <input
-                    type="time"
-                    value={editForm.start}
-                    onChange={(event) => setEditForm((f) => ({ ...f, start: event.target.value }))}
+                    type="date"
+                    value={editForm.date}
+                    onChange={(event) => setEditForm((f) => ({ ...f, date: event.target.value }))}
                     required
                   />
                 </label>
+                <div className="slot-form-row">
+                  <label className="slot-form-field">
+                    <span className="slot-form-label">Début</span>
+                    <input
+                      type="time"
+                      value={editForm.start}
+                      onChange={(event) => setEditForm((f) => ({ ...f, start: event.target.value }))}
+                      required
+                    />
+                  </label>
+                  <label className="slot-form-field">
+                    <span className="slot-form-label">Fin</span>
+                    <input
+                      type="time"
+                      value={editForm.end}
+                      onChange={(event) => setEditForm((f) => ({ ...f, end: event.target.value }))}
+                      required
+                    />
+                  </label>
+                </div>
+                <div className="slot-form-row">
+                  <label className="slot-form-field">
+                    <span className="slot-form-label">Capacité totale</span>
+                    <input
+                      type="number"
+                      min="1"
+                      value={editForm.capacite_totale}
+                      onChange={(event) =>
+                        setEditForm((f) => ({ ...f, capacite_totale: event.target.value }))
+                      }
+                      required
+                    />
+                  </label>
+                  <label className="slot-form-field">
+                    <span className="slot-form-label">Places restantes</span>
+                    <input
+                      type="number"
+                      min="0"
+                      value={editForm.capacite_restante}
+                      onChange={(event) =>
+                        setEditForm((f) => ({ ...f, capacite_restante: event.target.value }))
+                      }
+                      required
+                    />
+                  </label>
+                </div>
                 <label className="slot-form-field">
-                  <span className="slot-form-label">Fin</span>
-                  <input
-                    type="time"
-                    value={editForm.end}
-                    onChange={(event) => setEditForm((f) => ({ ...f, end: event.target.value }))}
-                    required
-                  />
-                </label>
-              </div>
-              <div className="slot-form-row">
-                <label className="slot-form-field">
-                  <span className="slot-form-label">Capacité totale</span>
-                  <input
-                    type="number"
-                    min="1"
-                    value={editForm.capacite_totale}
-                    onChange={(event) =>
-                      setEditForm((f) => ({ ...f, capacite_totale: event.target.value }))
-                    }
-                    required
-                  />
-                </label>
-                <label className="slot-form-field">
-                  <span className="slot-form-label">Places restantes</span>
+                  <span className="slot-form-label">Prix appliqué (MAD)</span>
                   <input
                     type="number"
                     min="0"
-                    value={editForm.capacite_restante}
+                    step="1"
+                    value={editForm.prixApplique}
                     onChange={(event) =>
-                      setEditForm((f) => ({ ...f, capacite_restante: event.target.value }))
+                      setEditForm((f) => ({ ...f, prixApplique: event.target.value }))
                     }
-                    required
+                    placeholder="Vide pour revenir au prix de base"
                   />
                 </label>
+                <label className="slot-form-field">
+                  <span className="slot-form-label">Statut</span>
+                  <select
+                    value={editForm.statut}
+                    onChange={(event) => setEditForm((f) => ({ ...f, statut: event.target.value }))}
+                  >
+                    {CRENEAU_STATUT_OPTIONS.map((opt) => (
+                      <option key={opt.value} value={opt.value}>
+                        {opt.label}
+                      </option>
+                    ))}
+                  </select>
+                </label>
               </div>
-              <label className="slot-form-field">
-                <span className="slot-form-label">Prix appliqué (MAD)</span>
-                <input
-                  type="number"
-                  min="0"
-                  step="1"
-                  value={editForm.prixApplique}
-                  onChange={(event) =>
-                    setEditForm((f) => ({ ...f, prixApplique: event.target.value }))
-                  }
-                  placeholder="Vide pour revenir au prix de base"
-                />
-              </label>
-              <label className="slot-form-field">
-                <span className="slot-form-label">Statut</span>
-                <select
-                  value={editForm.statut}
-                  onChange={(event) => setEditForm((f) => ({ ...f, statut: event.target.value }))}
-                >
-                  {CRENEAU_STATUT_OPTIONS.map((opt) => (
-                    <option key={opt.value} value={opt.value}>
-                      {opt.label}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <div className="modal-actions">
+              <div className="modal-actions availability-modal-footer">
                 <button type="submit" className="btn-submit">
                   Enregistrer
                 </button>

@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
 import { NavLink, useSearchParams } from 'react-router-dom'
-import { proActivitiesSeed, proReservationsSeed, proRevenueSeed } from '../prestataireMockData'
 import { PrestataireGreenBand } from '../../../layouts/PrestataireGreenBand'
 import { prestataireApi } from '../../../services/prestataireApi'
 import { PrestataireStatisticsPanel } from '../statistics/PrestataireStatisticsPanel'
@@ -28,13 +27,9 @@ export function PrestataireDashboardPage() {
 
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState('')
-  const [activitiesCount, setActivitiesCount] = useState(proActivitiesSeed.length)
-  const [pendingCount, setPendingCount] = useState(
-    proReservationsSeed.filter((item) => item.status === 'pending').length,
-  )
-  const [monthlyNet, setMonthlyNet] = useState(
-    proRevenueSeed[proRevenueSeed.length - 1]?.net || 0,
-  )
+  const [activitiesCount, setActivitiesCount] = useState(0)
+  const [pendingCount, setPendingCount] = useState(0)
+  const [monthlyNet, setMonthlyNet] = useState(0)
 
   useEffect(() => {
     let active = true
@@ -45,14 +40,14 @@ export function PrestataireDashboardPage() {
     ])
       .then(([activities, reservations, stats]) => {
         if (!active) return
-        if (activities.length) setActivitiesCount(activities.length)
-        if (reservations.length) {
-          setPendingCount(
-            reservations.filter(
-              (item) => item.status === 'awaiting_payment' || item.status === 'paid',
-            ).length,
-          )
-        }
+        setActivitiesCount(Array.isArray(activities) ? activities.length : 0)
+        setPendingCount(
+          Array.isArray(reservations)
+            ? reservations.filter(
+                (item) => item.status === 'awaiting_payment' || item.status === 'paid',
+              ).length
+            : 0,
+        )
         if (Number.isFinite(stats?.chiffre_affaires)) {
           setMonthlyNet(stats.chiffre_affaires)
         }

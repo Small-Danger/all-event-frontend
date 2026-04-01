@@ -1,5 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
+import { AuthPasswordField } from '../../../components/AuthPasswordField'
 import { useAuth } from '../../../context/useAuth'
 import logoAllevent from '../../../assets/brand/logo-allevent.png'
 import './AdminLoginPage.css'
@@ -10,6 +11,7 @@ export function AdminLoginPage() {
   const [form, setForm] = useState({ email: '', password: '' })
   const [error, setError] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
 
   const onSubmit = async (event) => {
     event.preventDefault()
@@ -71,13 +73,16 @@ export function AdminLoginPage() {
             </label>
             <label>
               Mot de passe
-              <input
-                type="password"
+              <AuthPasswordField
+                id="admin-login-password"
                 placeholder="********"
                 value={form.password}
                 onChange={(event) =>
                   setForm((current) => ({ ...current, password: event.target.value }))
                 }
+                show={showPassword}
+                onToggleShow={() => setShowPassword((v) => !v)}
+                autoComplete="current-password"
                 required
               />
             </label>

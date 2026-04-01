@@ -1,3 +1,5 @@
+import { messageFromApiPayload } from '../utils/apiError'
+
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000/api'
 
@@ -14,7 +16,9 @@ async function publicRequest(path, options = {}) {
   })
   const payload = await response.json().catch(() => ({}))
   if (!response.ok) {
-    throw new Error(payload?.message || 'Impossible de charger le catalogue.')
+    throw new Error(
+      messageFromApiPayload(payload) || 'Impossible de charger le catalogue.',
+    )
   }
   return payload
 }
@@ -30,7 +34,9 @@ async function publicFormRequest(path, formData) {
   })
   const payload = await response.json().catch(() => ({}))
   if (!response.ok) {
-    throw new Error(payload?.message || 'Envoi de la demande impossible.')
+    throw new Error(
+      messageFromApiPayload(payload) || 'Envoi de la demande impossible.',
+    )
   }
   return payload
 }
