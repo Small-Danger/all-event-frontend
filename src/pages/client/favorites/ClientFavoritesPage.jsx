@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useEffect, useMemo, useState } from 'react'
+import { MapPin, SlidersHorizontal } from 'lucide-react'
 import { clientApi } from '../../../services/clientApi'
 import './ClientFavoritesPage.css'
 
@@ -73,12 +74,6 @@ export function ClientFavoritesPage() {
     return rows
   }, [favorites, search, city, sortBy])
 
-  const avgRating = useMemo(() => {
-    if (!favorites.length) return 0
-    const total = favorites.reduce((sum, item) => sum + Number(item.rating || 0), 0)
-    return total / favorites.length
-  }, [favorites])
-
   return (
     <section className="client-favorites-page">
       <header className="fav-head">
@@ -87,7 +82,9 @@ export function ClientFavoritesPage() {
       </header>
 
       {!isLoading && favorites.length > 0 ? (
-        <div className="fav-kpis">
+        <>
+          {/* // [DESIGN] Stats visuelles mobile-first */}
+          <div className="fav-kpis fav-kpis-mobile">
           <article>
             <span>Favoris total</span>
             <strong>{favorites.length}</strong>
@@ -96,11 +93,8 @@ export function ClientFavoritesPage() {
             <span>Villes suivies</span>
             <strong>{Math.max(0, cities.length - 1)}</strong>
           </article>
-          <article>
-            <span>Note moyenne</span>
-            <strong>{avgRating.toFixed(1)} / 5</strong>
-          </article>
-        </div>
+          </div>
+        </>
       ) : null}
 
       {!isLoading && favorites.length > 0 ? (
@@ -111,14 +105,55 @@ export function ClientFavoritesPage() {
             value={search}
             onChange={(event) => setSearch(event.target.value)}
           />
-          <select value={city} onChange={(event) => setCity(event.target.value)}>
+          {/* [DESIGN] Chips filtres horizontales + selects cachés */}
+          <div className="fav-chips" aria-label="Filtres favoris">
+            <button
+              type="button"
+              className="fav-chip"
+              onClick={() => {
+                if (cities.length <= 1) return
+                if (city === 'all') {
+                  setCity(cities[1])
+                  return
+                }
+                const idx = cities.findIndex((value) => value === city)
+                const next = cities[idx + 1] || 'all'
+                setCity(next)
+              }}
+            >
+              <MapPin size={13} />
+              <span>{city === 'all' ? 'Toutes les villes' : city}</span>
+            </button>
+            <button
+              type="button"
+              className="fav-chip"
+              onClick={() => {
+                const orders = ['recent', 'rating', 'price_asc', 'price_desc']
+                const idx = orders.findIndex((value) => value === sortBy)
+                const next = orders[(idx + 1) % orders.length]
+                setSortBy(next)
+              }}
+            >
+              <SlidersHorizontal size={13} />
+              <span>
+                {sortBy === 'recent'
+                  ? 'Plus récents'
+                  : sortBy === 'rating'
+                    ? 'Meilleure note'
+                    : sortBy === 'price_asc'
+                      ? 'Prix croissant'
+                      : 'Prix décroissant'}
+              </span>
+            </button>
+          </div>
+          <select className="fav-select-hidden" value={city} onChange={(event) => setCity(event.target.value)}>
             {cities.map((value) => (
               <option key={value} value={value}>
                 {value === 'all' ? 'Toutes les villes' : value}
               </option>
             ))}
           </select>
-          <select value={sortBy} onChange={(event) => setSortBy(event.target.value)}>
+          <select className="fav-select-hidden" value={sortBy} onChange={(event) => setSortBy(event.target.value)}>
             <option value="recent">Plus récents</option>
             <option value="rating">Meilleure note</option>
             <option value="price_asc">Prix croissant</option>

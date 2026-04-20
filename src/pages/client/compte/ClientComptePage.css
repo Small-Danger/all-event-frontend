@@ -25,10 +25,10 @@
   width: 52px;
   height: 52px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #1e293b, #334155);
+  background: #7c3aed;
   color: #fff;
-  font-weight: 800;
-  font-size: 1.15rem;
+  font-weight: 700;
+  font-size: 1.125rem;
   display: grid;
   place-items: center;
 }
@@ -64,11 +64,12 @@
 
 .client-compte-section-title {
   margin: 0 0 8px;
-  font-size: 0.72rem;
-  font-weight: 800;
+  padding: 0 16px;
+  font-size: 0.75rem;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: #64748b;
+  letter-spacing: 0.12em;
+  color: #9ca3af;
 }
 
 .client-compte-list {
@@ -104,6 +105,19 @@
 
 .client-compte-row-label {
   flex: 1;
+}
+
+/* [DESIGN] Icônes d'item menu dans capsule douce */
+.client-compte-row-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 12px;
+  background: #f9fafb;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #334155;
+  flex-shrink: 0;
 }
 
 .client-compte-chevron {

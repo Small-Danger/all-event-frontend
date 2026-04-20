@@ -1,5 +1,6 @@
 import { Link, useLocation, useNavigate, useOutletContext, useParams, useSearchParams } from 'react-router-dom'
 import { useEffect, useMemo, useState } from 'react'
+import { Check, MapPin, Star, Tag, Wallet } from 'lucide-react'
 import logoAllevent from '../../assets/brand/logo-allevent.png'
 import { useAuth } from '../../context/useAuth'
 import { clientApi } from '../../services/clientApi'
@@ -221,14 +222,15 @@ export function LandingPage() {
             Aucune activité publiée pour le moment. Revenez bientôt ou explorez le catalogue complet.
           </p>
         )}
-        <div className="activity-grid">
+        {/* [DESIGN] Cards activités en scroll horizontal sur mobile */}
+        <div className="activity-grid activity-grid-scroll">
           {featuredActivities.map((item) => (
             <Link
               key={item.id}
               to={`/activity/${item.id}`}
               className="activity-cardLink"
             >
-              <article className="activity-card">
+              <article className="activity-card activity-card-mobile">
                 <div className="activity-media">
                   <img src={item.image} alt="" />
                   <span className="activity-badge">{item.category}</span>
@@ -462,6 +464,74 @@ export function SearchPage() {
       </section>
 
       <section className="catalog-filters">
+        {/* [DESIGN] Chips filtres horizontales (les selects restent cachés pour la logique) */}
+        <div className="catalog-filter-chips" aria-label="Filtres rapides">
+          <button
+            type="button"
+            className="catalog-chip"
+            onClick={() => {
+              const current = villes.find((v) => String(v.id) === String(villeId))
+              if (!villes.length) return
+              if (!current) {
+                setVilleId(String(villes[0].id))
+              } else {
+                const idx = villes.findIndex((v) => String(v.id) === String(villeId))
+                const next = villes[(idx + 1) % villes.length]
+                setVilleId(String(next.id))
+              }
+              setPage(1)
+            }}
+          >
+            <MapPin size={13} />
+            <span>{villes.find((v) => String(v.id) === String(villeId))?.nom || 'Toutes les villes'}</span>
+          </button>
+          <button
+            type="button"
+            className="catalog-chip"
+            onClick={() => {
+              if (!categories.length) return
+              if (!categorieId) {
+                setCategorieId(String(categories[0].id))
+              } else {
+                const idx = categories.findIndex((c) => String(c.id) === String(categorieId))
+                const next = categories[(idx + 1) % categories.length]
+                setCategorieId(String(next.id))
+              }
+              setPage(1)
+            }}
+          >
+            <Tag size={13} />
+            <span>{categories.find((c) => String(c.id) === String(categorieId))?.nom || 'Toutes catégories'}</span>
+          </button>
+          <button
+            type="button"
+            className="catalog-chip"
+            onClick={() => {
+              const isDefault = minPrice === 0 && maxPrice === 500000
+              const isLow = minPrice === 0 && maxPrice === 100000
+              if (isDefault) {
+                setMinPrice(0)
+                setMaxPrice(100000)
+              } else if (isLow) {
+                setMinPrice(100000)
+                setMaxPrice(500000)
+              } else {
+                setMinPrice(0)
+                setMaxPrice(500000)
+              }
+              setPage(1)
+            }}
+          >
+            <Wallet size={13} />
+            <span>
+              {minPrice === 0 && maxPrice === 500000
+                ? 'Tous les prix'
+                : minPrice === 0 && maxPrice === 100000
+                  ? 'Budget doux'
+                  : 'Premium'}
+            </span>
+          </button>
+        </div>
         <input
           type="search"
           value={search}
@@ -473,6 +543,7 @@ export function SearchPage() {
           aria-label="Rechercher une activité"
         />
         <select
+          className="catalog-select-hidden"
           value={villeId}
           onChange={(event) => {
             setVilleId(event.target.value)
@@ -487,6 +558,7 @@ export function SearchPage() {
           ))}
         </select>
         <select
+          className="catalog-select-hidden"
           value={categorieId}
           onChange={(event) => {
             setCategorieId(event.target.value)
@@ -738,6 +810,8 @@ export function ActivityDetailsPage() {
     <main className="activity-page">
       <section className="activity-hero">
         <img src={activity.image} alt="" />
+        {/* [DESIGN] Overlay pour lisibilité du hero */}
+        <div className="activity-hero-overlay" aria-hidden />
         <span>{activity.category}</span>
       </section>
 
@@ -745,11 +819,17 @@ export function ActivityDetailsPage() {
         <div className="activity-summary">
           <h1>{activity.title}</h1>
           <p className="activity-location">{activity.city}</p>
-          <p className="activity-score">
-            {activity.rating > 0
-              ? `${activity.rating} / 5 (${activity.reviews} avis)`
-              : `${activity.reviews} avis`}
-          </p>
+          {/* [DESIGN] Rating en étoiles plus lisible */}
+          <div className="activity-score">
+            {[1, 2, 3, 4, 5].map((i) => (
+              <Star
+                key={i}
+                size={14}
+                className={i <= Math.round(activity.rating || 0) ? 'activity-star activity-star--on' : 'activity-star'}
+              />
+            ))}
+            <span className="activity-score-count">({activity.reviews} avis)</span>
+          </div>
           <p className="activity-description">{activity.description || 'Description à venir.'}</p>
         </div>
 
@@ -836,7 +916,7 @@ export function ActivityDetailsPage() {
               <Link className="btn btn-light" to="/login" state={{ from: location }}>
                 Se connecter pour réserver
               </Link>
-              <Link className="btn btn-light" to="/register" state={{ from: location }}>
+              <Link className="btn btn-light activity-register-btn" to="/register" state={{ from: location }}>
                 Créer un compte
               </Link>
             </>
@@ -849,7 +929,7 @@ export function ActivityDetailsPage() {
 
 export function BecomePrestatairePage() {
   return (
-    <main className="become-page">
+    <main className="become-page become-page-safe">
       <section className="become-hero">
         <div className="become-hero-top">
           <p className="become-kicker">Programme Prestataire</p>
@@ -874,6 +954,17 @@ export function BecomePrestatairePage() {
           </article>
         </div>
         <div className="become-pro-actions become-pro-actions--hero">
+          {/* [DESIGN] Bénéfices visuels avant CTA */}
+          <div className="become-hero-bullets">
+            {['Gérez votre catalogue', 'Suivez vos réservations', 'Développez votre audience'].map((txt, i) => (
+              <div key={i} className="become-hero-bullet">
+                <div className="become-hero-bullet-icon">
+                  <Check size={16} />
+                </div>
+                <span>{txt}</span>
+              </div>
+            ))}
+          </div>
           <Link className="btn btn-primary" to="/prestataire/register">
             Créer mon espace pro
           </Link>

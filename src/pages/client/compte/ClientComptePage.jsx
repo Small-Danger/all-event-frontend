@@ -1,4 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom'
+import { CreditCard, Heart, MessageCircle, ShoppingCart, Star, Ticket } from 'lucide-react'
 import { useAuth } from '../../../context/useAuth'
 import './ClientComptePage.css'
 
@@ -45,36 +46,43 @@ export function ClientComptePage() {
         <ul className="client-compte-list">
           <li>
             <Link to="/panier" className="client-compte-row">
+              {/* [DESIGN] Icônes menu compte */}
+              <span className="client-compte-row-icon"><ShoppingCart size={16} /></span>
               <span className="client-compte-row-label">Panier</span>
               <ChevronRight />
             </Link>
           </li>
           <li>
             <Link to="/reservations" className="client-compte-row">
+              <span className="client-compte-row-icon"><Ticket size={16} /></span>
               <span className="client-compte-row-label">Mes billets & réservations</span>
               <ChevronRight />
             </Link>
           </li>
           <li>
             <Link to="/favorites" className="client-compte-row">
+              <span className="client-compte-row-icon"><Heart size={16} /></span>
               <span className="client-compte-row-label">Favoris</span>
               <ChevronRight />
             </Link>
           </li>
           <li>
             <Link to="/reviews" className="client-compte-row">
+              <span className="client-compte-row-icon"><Star size={16} /></span>
               <span className="client-compte-row-label">Mes avis</span>
               <ChevronRight />
             </Link>
           </li>
           <li>
             <Link to="/messages" className="client-compte-row">
+              <span className="client-compte-row-icon"><MessageCircle size={16} /></span>
               <span className="client-compte-row-label">Messages</span>
               <ChevronRight />
             </Link>
           </li>
           <li>
             <Link to="/payments" className="client-compte-row">
+              <span className="client-compte-row-icon"><CreditCard size={16} /></span>
               <span className="client-compte-row-label">Paiements</span>
               <ChevronRight />
             </Link>

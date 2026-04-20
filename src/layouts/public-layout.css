@@ -150,6 +150,22 @@
   background: #fff;
 }
 
+.header-login-icon {
+  display: none;
+  width: 36px;
+  height: 36px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  color: #0f172a;
+  background: #fff;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-login-icon:hover {
+  background: #f8fafc;
+}
+
 .header-cart-btn:hover {
   background: #f8fafc;
 }
@@ -494,7 +510,20 @@
   }
 
   .header-actions {
-    gap: 6px;
+    gap: 8px;
+  }
+
+  /* [DESIGN] Mobile: remplacer Connexion texte par icône */
+  .header-login-text {
+    display: none;
+  }
+
+  .header-login-icon {
+    display: inline-flex;
+  }
+
+  .header-signup-btn {
+    padding: 6px 12px;
   }
 
   .header-cart-btn {

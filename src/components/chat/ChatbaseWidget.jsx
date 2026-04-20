@@ -90,6 +90,31 @@ export function ChatbaseWidget() {
     identify()
   }, [auth.isAuthenticated, auth.token, auth.user?.id, isScriptReady])
 
+  // [DESIGN] Remonte le launcher Chatbase pour libérer l'accès au bouton "Mon compte" mobile.
+  useEffect(() => {
+    const applyLauncherOffset = () => {
+      const candidates = document.querySelectorAll(
+        'iframe[src*="chatbase"], [id*="chatbase"], [class*="chatbase"]',
+      )
+      candidates.forEach((node) => {
+        if (!(node instanceof HTMLElement)) return
+        const computed = window.getComputedStyle(node)
+        if (computed.position !== 'fixed') return
+        node.style.setProperty('bottom', 'calc(108px + env(safe-area-inset-bottom, 0px))', 'important')
+      })
+    }
+
+    applyLauncherOffset()
+    const observer = new MutationObserver(() => applyLauncherOffset())
+    observer.observe(document.body, { childList: true, subtree: true })
+
+    window.addEventListener('resize', applyLauncherOffset)
+    return () => {
+      observer.disconnect()
+      window.removeEventListener('resize', applyLauncherOffset)
+    }
+  }, [])
+
   return null
 }
 

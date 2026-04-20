@@ -38,6 +38,14 @@
   gap: 10px;
 }
 
+/* [DESIGN] Bloc stats coloré mobile */
+.fav-kpis-mobile {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  padding: 0 16px;
+  margin-bottom: 16px;
+}
+
 .fav-kpis article {
   border: 1px solid #dbe3ef;
   background: #fff;
@@ -45,6 +53,44 @@
   padding: 12px;
   display: grid;
   gap: 4px;
+}
+
+.fav-kpis-mobile article:first-child {
+  background: #f5f3ff;
+  border: none;
+  border-radius: 16px;
+  padding: 16px;
+}
+
+.fav-kpis-mobile article:first-child span {
+  color: #a78bfa;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.fav-kpis-mobile article:first-child strong {
+  color: #6d28d9;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.fav-kpis-mobile article:nth-child(2) {
+  background: #fffbeb;
+  border: none;
+  border-radius: 16px;
+  padding: 16px;
+}
+
+.fav-kpis-mobile article:nth-child(2) span {
+  color: #f59e0b;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.fav-kpis-mobile article:nth-child(2) strong {
+  color: #b45309;
+  font-size: 24px;
+  font-weight: 700;
 }
 
 .fav-kpis span { color: #64748b; font-size: .84rem; }
@@ -62,6 +108,15 @@
   border-radius: 12px;
   background: #fff;
   padding: 10px 12px;
+}
+
+/* [DESIGN] Filtres en chips scrollables sur mobile */
+.fav-chips {
+  display: none;
+}
+
+.fav-select-hidden {
+  display: block;
 }
 
 .favorites-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 12px; }
@@ -136,4 +191,35 @@
 @media (max-width: 760px) {
   .fav-kpis { grid-template-columns: 1fr; }
   .fav-toolbar { grid-template-columns: 1fr; }
+
+  .fav-chips {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 0 4px;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .fav-chips::-webkit-scrollbar {
+    display: none;
+  }
+
+  .fav-chip {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid #e5e7eb;
+    border-radius: 9999px;
+    background: #fff;
+    padding: 6px 12px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .fav-select-hidden {
+    display: none;
+  }
 }

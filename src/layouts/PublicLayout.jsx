@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
+import { User } from 'lucide-react'
 import logoAllevent from '../assets/brand/logo-allevent.png'
 import { useAuth } from '../context/useAuth'
 import { clientApi } from '../services/clientApi'
 import { publicApi } from '../services/publicApi'
-import { AlleventChatWidget } from '../components/chat/AlleventChatWidget'
 import './public-layout.css'
 
 const PUBLIC_VILLE_ID_KEY = 'allevent_public_ville_id'
@@ -329,10 +329,15 @@ export function PublicLayout() {
               </>
             ) : (
               <>
-                <Link className="header-btn secondary" to="/login">
+                {/* [DESIGN] Version texte conservée desktop */}
+                <Link className="header-btn secondary header-login-text" to="/login">
                   Connexion
                 </Link>
-                <Link className="header-btn primary" to="/register">
+                {/* [DESIGN] Icône mobile pour éviter la compression */}
+                <Link className="header-icon-btn header-login-icon" to="/login" aria-label="Connexion">
+                  <User size={18} />
+                </Link>
+                <Link className="header-btn primary header-signup-btn" to="/register">
                   S&apos;inscrire
                 </Link>
               </>
@@ -526,7 +531,6 @@ export function PublicLayout() {
         </div>
       ) : null}
 
-      <AlleventChatWidget />
     </div>
   )
 }
