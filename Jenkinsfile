@@ -2,7 +2,6 @@ pipeline {
     agent any
 
     environment {
-        RAILWAY_DEPLOY_HOOK = 'HOOK_FRONTEND_ICI'
         APP_URL = 'https://all-event-frontend-production.up.railway.app'
     }
 
@@ -11,7 +10,6 @@ pipeline {
     }
 
     stages {
-
         stage('Clone') {
             steps {
                 git credentialsId: 'github-token',
@@ -19,65 +17,49 @@ pipeline {
                     branch: 'main'
             }
         }
-
         stage('Installation dependances') {
             steps {
                 sh 'npm install'
             }
         }
-
         stage('Tests unitaires') {
             steps {
                 sh 'npm test -- --watchAll=false --passWithNoTests || true'
             }
         }
-
         stage('SAST - ESLint') {
             steps {
                 sh 'npx eslint src/ --ext .js,.jsx --max-warnings=100 || true'
             }
         }
-
         stage('Audit dependances npm') {
             steps {
                 sh 'npm audit --audit-level=critical || true'
             }
         }
-
         stage('Secrets - Gitleaks') {
             steps {
                 sh 'gitleaks detect -s . -v --log-opts="HEAD~1..HEAD" || true'
             }
         }
-
         stage('Build production') {
             steps {
                 sh 'npm run build'
             }
         }
-
         stage('Build Docker') {
             steps {
                 sh 'docker build -t allevent-frontend:latest .'
             }
         }
-
         stage('Scan Trivy') {
             steps {
                 sh 'trivy image --exit-code 0 --severity HIGH,CRITICAL allevent-frontend:latest || true'
             }
         }
-
         stage('DAST - ZAP') {
             steps {
                 sh 'zaproxy -cmd -quickurl ${APP_URL} -quickprogress || true'
-            }
-        }
-
-        stage('Deploiement Railway') {
-            steps {
-                echo 'Pipeline reussi - Deploiement sur Railway...'
-                sh "curl -X POST ${RAILWAY_DEPLOY_HOOK} || true"
             }
         }
     }
