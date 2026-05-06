@@ -2,6 +2,7 @@ pipeline {
     agent any
     environment {
         SONAR_PROJECT_KEY = 'allevent-frontend'
+        APP_URL = 'http://192.168.226.128:3000'
     }
     triggers { githubPush() }
     stages {
@@ -29,7 +30,7 @@ pipeline {
                         /opt/sonar-scanner/bin/sonar-scanner \
                         -Dsonar.projectKey=allevent-frontend \
                         -Dsonar.sources=src \
-                        -Dsonar.host.url=http://192.168.144.142:9000
+                        -Dsonar.host.url=http://192.168.226.128:9000
                     '''
                 }
             }
@@ -81,7 +82,16 @@ pipeline {
         }
         stage('DAST - ZAP') {
             steps {
-                sh 'zaproxy -cmd -quickurl https://all-event-frontend-production.up.railway.app -quickprogress || true'
+                sh 'zaproxy -cmd -quickurl ${APP_URL} -quickprogress || true'
+            }
+        }
+        stage('Deploy Docker Compose') {
+            steps {
+                sh '''
+                    cd /home/killi/allevent-deploy
+                    docker compose pull
+                    docker compose up -d
+                '''
             }
         }
     }
