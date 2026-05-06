@@ -35,7 +35,7 @@ export function LandingPage() {
     if (!isClient) {
       slides.push({
         id: 2,
-        title: 'Réservez en quelques clics',
+        title: 'Réservez en quelques clics Demonstration',
         text: 'Parcours simple, activités vérifiées et tarifs transparents.',
         image:
           'https://images.unsplash.com/photo-1505236858219-8359eb29e329?auto=format&fit=crop&w=1400&q=80',
